@@ -1,0 +1,22 @@
+version: '2'
+services:
+  back:
+    build:
+      context: deploy
+      dockerfile: app.docker
+    command: python manage.py runserver 0.0.0.0:8000 > runlog.txt
+    working_dir: /var/www
+    # stdin_open: true
+    # tty: true
+    volumes:
+      - ./back:/var/www
+    ports:
+      - "80:8000"
+      # - "3000:3000"
+  database:
+    image: postgres:14
+    environment:
+      - "POSTGRES_PASSWORD=secret"
+      - "POSTGRES_DB=db"
+    ports:
+      - "54321:5432"

@@ -1,0 +1,19 @@
+FROM python:3.9
+
+#RUN python -m pip install django djangorestframework
+
+#RUN cd /var/www \
+#	&& pip install -r requirements.txt
+
+ADD requirements.txt /root
+RUN cd /root && pip install -r requirements.txt
+
+#COPY ./pg /root
+
+#RUN cd /var/www \
+#	&& django-admin startproject www
+
+#WORKDIR /var/www
+
+#CMD python /var/www/manage.py runserver 0.0.0.0:8000
+#CMD ["python", "/var/www/manage.py", "runserver"]
