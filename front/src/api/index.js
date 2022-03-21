@@ -2,7 +2,7 @@ import Request from "@/libs/Request";
 
 const auth = {
   login(data) {
-    return new Request(data).post("/api/admin/auth/login");
+    return new Request(data).post("auth/login");
   },
   logout() {
     return new Request().post("/api/admin/auth/logout");

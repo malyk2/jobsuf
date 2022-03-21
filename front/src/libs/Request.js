@@ -11,6 +11,7 @@ class Request {
   constructor(data = {}) {
     this.data = data;
     this.params = {};
+    self = this
   }
 
   setParams(params = {}) {
@@ -67,10 +68,6 @@ class Request {
   }
 
   send(requestType, uri) {
-    // axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('token')}`;
-    // axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-
     axios.defaults.withCredentials = true;
     return new Promise((resolve, reject) => {
       axios({
@@ -86,48 +83,34 @@ class Request {
         resolve(response.data);
       })
         .catch((error) => {
-          // if (error.response.status === 401) {
-          //   const token = localStorage.getItem('token');
-          //   if (token) {
-          //     this.send('post', '/api/refresh')
-          //       .then((responseRefresh) => {
-          //         localStorage.setItem('token', responseRefresh.data.token);
-          //         const { config } = error;
-          //         const request = new Request(config.data);
-          //         request.send(config.method, config.url)
-          //           .then((responseOld) => {
-          //             resolve(responseOld);
-          //           });
-          //       })
-          //       .catch((errorRefresh) => {
-          //         reject(errorRefresh.response);
-          //         localStorage.removeItem('user');
-          //         localStorage.removeItem('token');
-          //         router.push({ name: 'login' });
-          //       });
-          //   } else {
-          //     router.push({ name: 'login' });
-          //     reject(error.response);
-          //   }
-          // } else {
-          //   Toastr.e(error.response.data.message);
           reject(error.response);
-          // }
         });
     });
   }
 
   getUrl(uri) {
-    console.log('getUrl');
-    console.log(uri);
-    let url = process.env.VUE_APP_API_URL || 'http://test';
+    let url = process.env.VUE_APP_API_URL || 'http://localhost';
     const port = process.env.VUE_APP_API_PORT || false;
     url += port ? ':' + port + '/' + uri : '/' + uri
     return url
-    // port ? 
-    // if() {
+  }
 
+  async csrf() {
+    // return this
+    return this.get('auth/csrf')
+    // if (!this.getCookie('crrg')) {
+    // } else {
+    //   return this;
     // }
+  }
+
+  getCookie(name) {
+    let cookie = {};
+    document.cookie.split(';').forEach(function(el) {
+      let [k,v] = el.split('=');
+      cookie[k.trim()] = v;
+    })
+    return cookie[name];
   }
 }
 

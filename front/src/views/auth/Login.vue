@@ -112,8 +112,7 @@
                     rounded
                     text-sm
                     shadow
-                    focus:outline-none
-                    focus:ring
+                    focus:outline-none focus:ring
                     w-full
                     ease-linear
                     transition-all
@@ -154,8 +153,7 @@
                     rounded
                     text-sm
                     shadow
-                    focus:outline-none
-                    focus:ring
+                    focus:outline-none focus:ring
                     w-full
                     ease-linear
                     transition-all
@@ -274,44 +272,12 @@ export default {
         password: "",
         remember_me: false,
       }),
-      body:"",
+      body: "",
       github,
       google,
     };
   },
-  mounted() {
-    console.log('mounted');
-    // await api.login(formData).then(response => {
-    //   commit('setMe', response.data)
-    // }).catch(response => {
-    //   throw response
-    // })
-    // let request = new Request().get("http://localhost:8000/test/cook").then(response => {
-    //   console.log('THEN 1');
-    //   new Request({'foo':'bar'}).post("http://localhost:8000/test/login").then(response => {
-    //     console.log('THEN 2');
-    //     new Request().get("http://localhost:8000/test/me").then(response => {
-    //       console.log('THEN 3');
-    //       response.data
-    //     }).catch(response => {
-    //       console.log('CATCH 3');
-    //     })
-    //   }).catch(response => {
-    //     console.log('CATCH 2');
-    //   })
-    // }).catch(response => {
-    //   console.log('CATCH 1');
-    // });
-
-    new Request().get("http://localhost:8000/test/me").then(response => {
-          console.log('THEN 3');
-          console.log(response.data);
-          // response.data
-        }).catch(response => {
-          console.log('CATCH 3');
-        })
-    // this.body = request.body;
-  },
+  mounted() {},
   computed: {
     ...mapState({
       message: (state) => state.auth.message,
@@ -322,28 +288,29 @@ export default {
     ...mapActions("auth", ["login"]),
 
     signIn() {
-      this.form.errors.clear();
-      this.form.busy = true;
-      console.log('Sign in');
-      // this.login(this.form.data())
-      //   .then((data) => {
-      //     this.form.onSuccess();
-      //     this.$router.push("/admin/dashboard");
-      //   })
-      //   .catch((response) => {
-      //     this.form.onFail(response.data.errors);
-      //     if (response.status == 422) {
-      //       this.setMessage({
-      //         show: false,
-      //       });
-      //     } else {
-      //       this.setMessage({
-      //         show: true,
-      //         text: response.data.message,
-      //         type: "danger",
-      //       });
-      //     }
-      //   });
+      new Request().csrf().then(() => {
+        this.form.errors.clear();
+        this.form.busy = true;
+        this.login(this.form.data())
+          .then((data) => {
+            this.form.onSuccess();
+            this.$router.push("/admin/dashboard");
+          })
+          .catch((response) => {
+            this.form.onFail(response.data);
+            if (response.status == 400) {
+              this.setMessage({
+                show: false,
+              });
+            } else {
+              this.setMessage({
+                show: true,
+                text: response.data.message,
+                type: "danger",
+              });
+            }
+          });
+      });
     },
   },
 };
