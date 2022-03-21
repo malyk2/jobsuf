@@ -34,7 +34,8 @@ const actions = {
       });
   },
   async logout({ commit }) {
-    await api.logout().then(response => {
+    // await api.logout().then(response => {
+    await api.logout().then(() => {
       commit('setMe', {})
     }).catch(response => {
       throw response

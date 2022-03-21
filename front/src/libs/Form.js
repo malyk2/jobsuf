@@ -130,7 +130,7 @@ class Form {
    *
    * @param {object} data
    */
-  onSuccess(data) {
+  onSuccess() {
     this.busy = false;
     this.reset();
   }

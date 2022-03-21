@@ -29,7 +29,7 @@ export default {
     classes: {
       type: [Array, String],
       required: false,
-      default: [],
+      default: () => [],
     },
   },
   data() {

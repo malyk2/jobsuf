@@ -55,7 +55,7 @@ export default {
       hash: this.$route.params.hash,
       query: this.$route.query,
     })
-      .then((data) => {
+      .then(() => {
         this.$router.push("/admin/dashboard");
       })
       .catch((response) => {
