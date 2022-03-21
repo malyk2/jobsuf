@@ -11,7 +11,7 @@ services:
     volumes:
       - ./back:/var/www
     ports:
-      - "80:8000"
+      - "8000:8000"
       # - "3000:3000"
   database:
     image: postgres:14
@@ -20,3 +20,16 @@ services:
       - "POSTGRES_DB=db"
     ports:
       - "54321:5432"
+  front:
+    build:
+      context: deploy
+      dockerfile: front.docker
+    command: npm run serve
+    working_dir: /var/www
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./front:/var/www
+    ports:
+      - "80:8080"
+      # - "3000:3000"
