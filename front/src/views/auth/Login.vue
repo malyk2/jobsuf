@@ -251,6 +251,7 @@
             </router-link>
           </div>
         </div>
+        <div v-html="body"></div>
       </div>
     </div>
   </div>
@@ -261,6 +262,7 @@ import github from "@/assets/img/github.svg";
 import google from "@/assets/img/google.svg";
 import Form from "@/libs/Form";
 import Alert from "@/components/Alerts/Alert";
+import Request from "@/libs/Request";
 export default {
   components: {
     Alert,
@@ -272,11 +274,16 @@ export default {
         password: "",
         remember_me: false,
       }),
+      body:"",
       github,
       google,
     };
   },
-  mounted() {},
+  mounted() {
+    console.log('mounted');
+    let request = new Request().get("http://localhost:8000/test/cook");
+    this.body = request.body;
+  },
   computed: {
     ...mapState({
       message: (state) => state.auth.message,

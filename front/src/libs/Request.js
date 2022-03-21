@@ -68,7 +68,8 @@ class Request {
 
   send(requestType, url) {
     // axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('token')}`;
-
+    // axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    axios.defaults.withCredentials = true;
     return new Promise((resolve, reject) => {
       axios({
         url: url,
