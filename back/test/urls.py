@@ -20,5 +20,7 @@ from . import views
 urlpatterns = [
     path('', views.test),
     path('/cook', views.set_csrf_token),
+    path('/login', views.login),
+    path('/me', views.me),
     # path('/cook', views.test2),
 ]

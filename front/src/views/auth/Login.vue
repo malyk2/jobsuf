@@ -281,8 +281,36 @@ export default {
   },
   mounted() {
     console.log('mounted');
-    let request = new Request().get("http://localhost:8000/test/cook");
-    this.body = request.body;
+    // await api.login(formData).then(response => {
+    //   commit('setMe', response.data)
+    // }).catch(response => {
+    //   throw response
+    // })
+    // let request = new Request().get("http://localhost:8000/test/cook").then(response => {
+    //   console.log('THEN 1');
+    //   new Request({'foo':'bar'}).post("http://localhost:8000/test/login").then(response => {
+    //     console.log('THEN 2');
+    //     new Request().get("http://localhost:8000/test/me").then(response => {
+    //       console.log('THEN 3');
+    //       response.data
+    //     }).catch(response => {
+    //       console.log('CATCH 3');
+    //     })
+    //   }).catch(response => {
+    //     console.log('CATCH 2');
+    //   })
+    // }).catch(response => {
+    //   console.log('CATCH 1');
+    // });
+
+    new Request().get("http://localhost:8000/test/me").then(response => {
+          console.log('THEN 3');
+          console.log(response.data);
+          // response.data
+        }).catch(response => {
+          console.log('CATCH 3');
+        })
+    // this.body = request.body;
   },
   computed: {
     ...mapState({
@@ -292,6 +320,7 @@ export default {
   methods: {
     ...mapMutations("auth", ["setMessage"]),
     ...mapActions("auth", ["login"]),
+
     signIn() {
       this.form.errors.clear();
       this.form.busy = true;
