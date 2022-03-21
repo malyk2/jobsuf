@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_crontab',
     # 'test',
     # 'auth.apps.AuthConfig',
+    'user_rss',
 ]
 
 MIDDLEWARE = [
