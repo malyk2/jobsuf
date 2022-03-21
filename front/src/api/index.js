@@ -11,7 +11,7 @@ const auth = {
     return new Request(data).post("/api/admin/auth/register");
   },
   getMe() {
-    return new Request().get("/api/admin/auth/me");
+    return new Request().get("auth/me");
   },
   forgotPassword(data) {
     return new Request(data).post("/api/admin/auth/password/forgot");

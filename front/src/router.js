@@ -1,11 +1,11 @@
 import { createWebHistory, createRouter } from "vue-router";
-// import Admin from './layouts/Admin.vue'
+import Admin from './layouts/Admin.vue'
 import Auth from './layouts/Auth.vue'
 // Admin
-// import Dashboard from './views/admin/Dashboard.vue'
-// import Settings from './views/admin/Settings.vue'
-// import Tables from './views/admin/Tables.vue'
-// import Maps from './views/admin/Maps.vue'
+import Dashboard from './views/admin/Dashboard.vue'
+import Settings from './views/admin/Settings.vue'
+import Tables from './views/admin/Tables.vue'
+import Maps from './views/admin/Maps.vue'
 // Auth
 import Login from './views/auth/Login.vue'
 import PasswordForgot from './views/auth/PasswordForgot.vue'
@@ -20,63 +20,59 @@ import Index from './views/Index.vue'
 // import UsersIndex from './views/admin/users/UsersIndex.vue'
 // import UsersForm from './views/admin/users/UsersForm.vue'
 // middlewares
-// import { Auth as AuthMiddleware } from '@/middlewares/Auth'
+import { Auth as AuthMiddleware } from '@/middlewares/Auth'
 
 const routes = [
   {
     path: "/",
     component: Index,
   },
-//   {
-//     path: "/admin",
-//     redirect: "/admin/dashboard",
-//     component: Admin,
-//     children: [
-//       {
-//         path: "/admin/dashboard",
-//         name: "admin.dashboard",
-//         component: Dashboard,
-//         meta: { middleware: [new AuthMiddleware()] },
-//       },
-//       {
-//         path: "/admin/users",
-//         name: "admin.users.index",
-//         component: UsersIndex,
-//         meta: { middleware: [new AuthMiddleware()] },
-//       },
-//       {
-//         path: "/admin/users/create",
-//         name: "admin.users.create",
-//         component: UsersForm,
-//         props: {'id': null},
-//         meta: { middleware: [new AuthMiddleware()] },
-//       },
-//       {
-//         path: "/admin/users/:id",
-//         name: "admin.users.edit",
-//         component: UsersForm,
-//         props: true,
-//         meta: { middleware: [new AuthMiddleware()] },
-//       },
-//       {
-//         path: "/admin/settings",
-//         component: Settings,
-//       },
-//       {
-//         path: "/admin/tables",
-//         component: Tables,
-//       },
-//       {
-//         path: "/admin/maps",
-//         component: Maps,
-//       },
-//       // {
-//       //   path: "/admin/login",
-//       //   component: Login,
-//       // },
-//     ],
+  {
+    path: "/admin",
+    redirect: "/admin/dashboard",
+    component: Admin,
+    children: [
+      {
+        path: "/admin/dashboard",
+        name: "admin.dashboard",
+        component: Dashboard,
+        meta: { middleware: [new AuthMiddleware()] },
+      },
+      // {
+      //   path: "/admin/users",
+      //   name: "admin.users.index",
+      //   component: UsersIndex,
+      //   meta: { middleware: [new AuthMiddleware()] },
+      // },
+      // {
+      //   path: "/admin/users/create",
+      //   name: "admin.users.create",
+      //   component: UsersForm,
+      //   props: {'id': null},
+      //   meta: { middleware: [new AuthMiddleware()] },
+      // },
+      // {
+      //   path: "/admin/users/:id",
+      //   name: "admin.users.edit",
+      //   component: UsersForm,
+      //   props: true,
+      //   meta: { middleware: [new AuthMiddleware()] },
+      // },
+      {
+        path: "/admin/settings",
+        component: Settings,
+      },
+      {
+        path: "/admin/tables",
+        component: Tables,
+      },
+      {
+        path: "/admin/maps",
+        component: Maps,
+      },
+    ],
 
-//   },
+  },
   {
     path: "/admin",
     // redirect: "/admin/login",
