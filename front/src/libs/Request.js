@@ -66,13 +66,15 @@ class Request {
     return this.send('delete', url);
   }
 
-  send(requestType, url) {
+  send(requestType, uri) {
     // axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('token')}`;
     // axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+
     axios.defaults.withCredentials = true;
     return new Promise((resolve, reject) => {
       axios({
-        url: url,
+        url: this.getUrl(uri),
         method: requestType,
         data: this.data,
         params: this.params
@@ -113,6 +115,19 @@ class Request {
           // }
         });
     });
+  }
+
+  getUrl(uri) {
+    console.log('getUrl');
+    console.log(uri);
+    let url = process.env.VUE_APP_API_URL || 'http://test';
+    const port = process.env.VUE_APP_API_PORT || false;
+    url += port ? ':' + port + '/' + uri : '/' + uri
+    return url
+    // port ? 
+    // if() {
+
+    // }
   }
 }
 
