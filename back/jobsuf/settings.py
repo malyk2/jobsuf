@@ -150,5 +150,13 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 # CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOW_CREDENTIALS=True
+
 CSRF_USE_SESSIONS=False
+
 CSRF_COOKIE_HTTPONLY=False
+
+#cron 
+
+CRONJOBS = [
+    # ('*/5 * * * *', 'rss.cron.my_scheduled_job')
+]
