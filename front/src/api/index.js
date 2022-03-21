@@ -42,7 +42,26 @@ const users = {
   },
 }
 
+const rssUpwork = {
+  index(query = {}) {
+    return new Request().setParams(query).get("rss/upwork/");
+  },
+  create(data) {
+    return new Request(data).post("rss/upwork/");
+  },
+  get(id) {
+    return new Request().get("rss/upwork/"+id);
+  },
+  update(id, data) {
+    return new Request(data).post("rss/upwork/"+id);
+  },
+  delete(id) {
+    return new Request().delete("rss/upwork/"+id);
+  },
+}
+
 export {
   auth,
   users,
+  rssUpwork,
 };
