@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'test',
-    # 'auth',
+    'django_crontab',
+    # 'test',
+    # 'auth.apps.AuthConfig',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +143,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+]
+CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
 ]
 # CORS_URLS_REGEX = r"^/api/.*$"
