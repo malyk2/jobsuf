@@ -26,8 +26,8 @@ services:
       dockerfile: front.docker
     command: npm run serve
     working_dir: /var/www
-    stdin_open: true
-    tty: true
+    # stdin_open: true
+    # tty: true
     volumes:
       - ./front:/var/www
     ports:
