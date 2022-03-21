@@ -21,7 +21,7 @@ from django.contrib.auth import views as auth_views #import this
 
 urlpatterns = [
     path('', views.test),
-    path('/cook', views.set_csrf_token),
+    path('cook', views.set_csrf_token),
     path('/login', views.login),
     path('/me', views.me),
     # path('/cook', views.test2),
