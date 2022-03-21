@@ -18,7 +18,7 @@ const actions = {
       show: false,
     })
     await api.login(formData).then(response => {
-      commit('setMe', response.data)
+      commit('setMe', response)
     }).catch(response => {
       throw response
     })
@@ -43,7 +43,7 @@ const actions = {
   },
   async getMe({ commit }) {
     await api.getMe().then(response => {
-      commit('setMe', response.data)
+      commit('setMe', response)
     }).catch(response => {
       throw response
     })
