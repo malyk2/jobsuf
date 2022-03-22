@@ -1,5 +1,8 @@
 <template>
-  <div class="py-2">
+  <div
+    class="py-2"
+    v-if="paginator.getPages().length == 1 ? showOnePage : true"
+  >
     <nav class="block">
       <ul class="flex pl-0 rounded list-none flex-wrap">
         <li>
@@ -24,7 +27,7 @@
               text-emerald-500
             "
             @click.prevent="changePage(1)"
-            v-if="pagination.current_page > 2"
+            v-if="paginator.getCurrentPage() > 2"
           >
             <i class="fas fa-chevron-left -ml-px"></i>
             <i class="fas fa-chevron-left -ml-px"></i>
@@ -51,14 +54,14 @@
               bg-white
               text-emerald-500
             "
-            @click.prevent="changePage(pagination.current_page - 1)"
-            v-if="pagination.current_page > 1"
+            @click.prevent="changePage(paginator.getCurrentPage() - 1)"
+            v-if="paginator.getCurrentPage() > 1"
           >
             <i class="fas fa-chevron-left -ml-px"></i>
           </a>
         </li>
 
-        <li v-for="page in pagesNumber" :key="page">
+        <li v-for="page in paginator.getPages()" :key="page">
           <a
             href="#pablo"
             class="
@@ -78,7 +81,7 @@
               border border-solid border-emerald-500
             "
             :class="[
-              page == pagination.current_page
+              page == paginator.getCurrentPage()
                 ? ['text-white', 'bg-emerald-500']
                 : ['text-emerald-500', 'bg-white'],
             ]"
@@ -109,8 +112,8 @@
               bg-white
               text-emerald-500
             "
-            @click.prevent="changePage(pagination.current_page + 1)"
-            v-if="pagination.last_page > pagination.current_page"
+            @click.prevent="changePage(paginator.getCurrentPage() + 1)"
+            v-if="paginator.getLastPage() > paginator.getCurrentPage()"
           >
             <i class="fas fa-chevron-right -mr-px"></i>
           </a>
@@ -136,8 +139,8 @@
               bg-white
               text-emerald-500
             "
-            @click.prevent="changePage(pagination.last_page)"
-            v-if="pagination.last_page - pagination.current_page > 1"
+            @click.prevent="changePage(paginator.getLastPage())"
+            v-if="paginator.getLastPage() - paginator.getCurrentPage() > 1"
           >
             <i class="fas fa-chevron-right -mr-px"></i>
             <i class="fas fa-chevron-right -mr-px"></i>
@@ -148,41 +151,27 @@
   </div>
 </template>
 <script>
+import Paginator from "@/libs/Paginator";
 export default {
   name: "paginator-admin",
   props: {
-    pagination: {
-      type: Object,
+    paginator: {
+      type: Paginator,
       required: true,
     },
     offset: {
       type: Number,
       default: 2,
     },
-  },
-  computed: {
-    pagesNumber() {
-      if (!this.pagination.to) {
-        return [];
-      }
-      let from = this.pagination.current_page - this.offset;
-      if (from < 1) {
-        from = 1;
-      }
-      let to = from + this.offset * 2;
-      if (to >= this.pagination.last_page) {
-        to = this.pagination.last_page;
-      }
-      let pagesArray = [];
-      for (let page = from; page <= to; page++) {
-        pagesArray.push(page);
-      }
-      return pagesArray;
+    showOnePage: {
+      type: Boolean,
+      default: false,
     },
   },
+  computed: {},
   methods: {
     changePage(page) {
-      this.pagination.current_page = page;
+      this.paginator.setPage(page);
       this.$emit("paginate");
     },
   },

@@ -32,7 +32,7 @@
                 <table-dropdown-link @click="gotoForm(item)">
                   Update
                 </table-dropdown-link>
-                <table-dropdown-link @click="deleteUser(item)">
+                <table-dropdown-link @click="deleteItem(item)">
                   Delete
                 </table-dropdown-link>
               </table-dropdown>
@@ -40,9 +40,9 @@
           </tr>
         </tbody>
       </table>
-      <!-- <div class="mx-auto">
-        <paginator-admin :pagination="pagination" @paginate="getUsers" />
-      </div> -->
+      <div class="mx-auto">
+        <paginator-admin :paginator="paginator" @paginate="getItems" />
+      </div>
     </div>
   </card-base>
 </template>
@@ -55,6 +55,7 @@ import TableTd from "@/components/Table/TableTd.vue";
 import TableDropdown from "@/components/Dropdowns/TableDropdown.vue";
 import TableDropdownLink from "@/components/Dropdowns/TableDropdownLink.vue";
 import PaginatorAdmin from "@/components/Paginators/PaginatorAdmin.vue";
+import Paginator from "@/libs/Paginator";
 import { rssUpwork as api } from "@/api";
 
 export default {
@@ -62,7 +63,7 @@ export default {
     return {
       color: "light",
       items: [],
-      pagination: {},
+      paginator: new Paginator(10),
     };
   },
   components: {
@@ -82,13 +83,13 @@ export default {
     getItems() {
       api.index(this.listQuery).then((response) => {
         this.items = response.results;
-        // this.pagination = response.meta;
+        this.paginator.setCount(response.count)
       });
     },
     gotoForm(item) {
       this.$router.push({name:'admin.rss.upwork.edit', params:{id: item.id}})
     },
-    deleteUser(item) {
+    deleteItem(item) {
       api.delete(item.id).then(response => {
         const index = this.items.findIndex(i => i.id == item.id);
         if (index > -1) {
@@ -100,7 +101,8 @@ export default {
   computed: {
     listQuery() {
       return {
-        page: this.pagination ? this.pagination.current_page : null,
+        offset: this.paginator.offset,
+        limit: this.paginator.limit,
       };
     },
   },
