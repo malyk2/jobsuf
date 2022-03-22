@@ -18,7 +18,7 @@ class Upwork(models.Model):
     type = models.CharField(choices=TYPE_CHOICES,
                             blank=False, max_length=100)
     topic = models.CharField(choices=TOPIC_CHOICES, null=True, max_length=100)
-    q = models.CharField(null=True, max_length=100)
+    q = models.CharField(blank=True, max_length=100)
     active = models.BooleanField(default=False)
     user = models.ForeignKey(
         'auth.User', related_name='rss', on_delete=models.CASCADE)
