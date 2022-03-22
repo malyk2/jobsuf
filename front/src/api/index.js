@@ -50,13 +50,13 @@ const rssUpwork = {
     return new Request(data).post("rss/upwork/");
   },
   get(id) {
-    return new Request().get("rss/upwork/"+id);
+    return new Request().get("rss/upwork/"+id+"/");
   },
   update(id, data) {
-    return new Request(data).post("rss/upwork/"+id);
+    return new Request(data).put("rss/upwork/"+id+"/");
   },
   delete(id) {
-    return new Request().delete("rss/upwork/"+id);
+    return new Request().delete("rss/upwork/"+id+"/");
   },
 }
 
