@@ -6,14 +6,14 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.models import User
 from . import serializers
 from django.contrib.auth import authenticate, login as base_login
+from pprint import pprint
 # Create your views here.
 # def test()
 
 # @ensure_csrf_cookie
 @api_view(['GET', 'POST'])
 def test(request, format=None):
-    token = get_token(request=request);
-    return Response(token)
+    return Response('test')
 
 @api_view(['GET', 'POST'])
 def test2(request, format=None):
