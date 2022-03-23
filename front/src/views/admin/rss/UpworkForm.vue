@@ -1,55 +1,57 @@
 <template>
-  <card-base>
-    <template v-slot:header>
-      <h6 class="text-blueGray-700 text-xl font-bold">
-        {{ id ? "Update" : "Create" }} upwork RSS
-      </h6>
-    </template>
-    <form @submit.prevent="save">
-      <div class="flex flex-wrap">
-        <div class="w-full lg:w-6/12 px-4">
-          <input-base
-            label="Title"
-            v-model="form.title"
-            :error="form.errors.first('title')"
-          />
+  <div class="w-full lg:w-12/12 px-4">
+    <card-base>
+      <template v-slot:header>
+        <h6 class="text-blueGray-700 text-xl font-bold">
+          {{ id ? "Update" : "Create" }} upwork RSS
+        </h6>
+      </template>
+      <form @submit.prevent="save">
+        <div class="flex flex-wrap">
+          <div class="w-full lg:w-6/12 px-4">
+            <input-base
+              label="Title"
+              v-model="form.title"
+              :error="form.errors.first('title')"
+            />
+          </div>
+          <div class="w-full lg:w-6/12 px-4">
+            <select-base
+              label="Type"
+              v-model="form.type"
+              :options="types"
+              firstOption="Select type"
+              :error="form.errors.first('type')"
+            />
+          </div>
+          <div class="w-full lg:w-6/12 px-4">
+            <select-base
+              label="Topic"
+              v-model="form.topic"
+              :options="topics"
+              firstOption="Select topic"
+              :error="form.errors.first('topic')"
+            />
+          </div>
+          <div class="w-full lg:w-6/12 px-4">
+            <input-base
+              label="Query"
+              v-model="form.q"
+              :error="form.errors.first('q')"
+            />
+          </div>
+          <div class="w-full lg:w-6/12 px-4">
+            <checkbox-base
+              label="Acive"
+              v-model="form.active"
+              :error="form.errors.first('active')"
+            />
+          </div>
         </div>
-        <div class="w-full lg:w-6/12 px-4">
-          <select-base
-            label="Type"
-            v-model="form.type"
-            :options="types"
-            firstOption="Select type"
-            :error="form.errors.first('type')"
-          />
-        </div>
-        <div class="w-full lg:w-6/12 px-4">
-          <select-base
-            label="Topic"
-            v-model="form.topic"
-            :options="topics"
-            firstOption="Select topic"
-            :error="form.errors.first('topic')"
-          />
-        </div>
-        <div class="w-full lg:w-6/12 px-4">
-          <input-base
-            label="Query"
-            v-model="form.q"
-            :error="form.errors.first('q')"
-          />
-        </div>
-        <div class="w-full lg:w-6/12 px-4">
-          <checkbox-base
-            label="Acive"
-            v-model="form.active"
-            :error="form.errors.first('active')"
-          />
-        </div>
-      </div>
-      <button-base type="submit" :disabled="form.busy">Save</button-base>
-    </form>
-  </card-base>
+        <button-base type="submit" :disabled="form.busy">Save</button-base>
+      </form>
+    </card-base>
+  </div>
 </template>
 <script>
 import CardBase from "@/components/Cards/CardBase.vue";
