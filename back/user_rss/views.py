@@ -30,7 +30,7 @@ class SecretGetSave(APIView):
         secret = self.get_secret(request)
         serializer = SecretSerializer(secret, data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(user=request.user)
         return Response(serializer.data)
 
     def get_secret(self, request):

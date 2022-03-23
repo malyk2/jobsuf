@@ -29,7 +29,7 @@ class Upwork(models.Model):
 
 class Secret(models.Model):
     org_uid = models.CharField(max_length=100, blank=False)
-    security_token = models.CharField(max_length=100, blank=False)
+    security_token = models.CharField(max_length=200, blank=False)
     user_uid = models.CharField(max_length=100, blank=False)
 
     user = models.OneToOneField(
