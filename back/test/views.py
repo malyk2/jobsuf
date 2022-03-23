@@ -22,6 +22,10 @@ def test(request, format=None):
     job = Job.objects.create(country=country)
     # job = Job.objects.get(pk='fb953407-1622-4759-8095-f43fee09caf9')
 
+    data = {
+        'title': 'test title',
+    }
+    # job = Job.objects.create(**data);
     # country = job.country.create()
     # print(job.__dict__)
     # print(json.dumps(job))
