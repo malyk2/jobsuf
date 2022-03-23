@@ -12,7 +12,7 @@ services:
       - ./back:/var/www
     ports:
       - "8000:8000"
-      # - "3000:3000"
+      - "3000:3000"
   database:
     image: postgres:14
     environment:

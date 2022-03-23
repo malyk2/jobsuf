@@ -92,12 +92,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'database',
-        # 'HOST': '127.0.0.1',
+        'HOST': env('DB_HOST', default='localhost'),
         'NAME': 'db',
         'PASSWORD': env('DB_PASSWORD', default='secret'),
-        'PASSWORD': 'secret',
-        'PORT': 5432,
+        'PORT': env('DB_PORT', default=5432),
         'USER': env('DB_USER', default='root'), 
     }
 }
@@ -165,5 +163,7 @@ CSRF_COOKIE_HTTPONLY=False
 #cron 
 
 CRONJOBS = [
-    # ('*/5 * * * *', 'rss.cron.my_scheduled_job')
+    ('*/5 * * * *', 'rss.cron.load_rss_upwork')
 ]
+# python manage.py crontab add
+# python manage.py crontab show
