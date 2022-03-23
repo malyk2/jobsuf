@@ -18,13 +18,13 @@ def get_real():
 def load_rss_upwork():
   print('load_rss_upwork');
 
-  entry = get_real()
+  # entry = get_real()
   # entry = get_temp_entry1()
 
   # test_dict = {'id': 1, 'name': 'some-name'}
   # print(test_dict.id)
   # JSONRenderer
-  print(entry['guidislink'])
+  # print(entry['guidislink'])
   # print(entry.keys())
   # print(type(entry) )
 
