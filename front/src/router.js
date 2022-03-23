@@ -22,6 +22,7 @@ import Index from './views/Index.vue'
 // Rss
 import UpworkIndex from './views/admin/rss/UpworkIndex.vue'
 import UpworkForm from './views/admin/rss/UpworkForm.vue'
+import UpworkSecrets from './views/admin/rss/UpworkSecrets.vue'
 // middlewares
 import { Auth as AuthMiddleware } from '@/middlewares/Auth'
 
@@ -45,6 +46,12 @@ const routes = [
         path: "/admin/rss/upwork",
         name: "admin.rss.upwork.index",
         component: UpworkIndex,
+        meta: { middleware: [new AuthMiddleware()] },
+      },
+      {
+        path: "/admin/rss/upwork/secrets",
+        name: "admin.rss.upwork.secrets",
+        component: UpworkSecrets,
         meta: { middleware: [new AuthMiddleware()] },
       },
       {

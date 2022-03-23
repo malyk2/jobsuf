@@ -58,6 +58,13 @@ const rssUpwork = {
   delete(id) {
     return new Request().delete("rss/upwork/"+id+"/");
   },
+  getSecret() {
+    return new Request().get("rss/secret/");
+  },
+  saveSecret(data) {
+    return new Request(data).post("rss/secret/");
+  },
+  
 }
 
 export {

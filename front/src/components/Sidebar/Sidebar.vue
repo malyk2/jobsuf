@@ -93,7 +93,7 @@
           <li class="items-center">
             <router-link
               class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-              :to="{'name':'admin.rss.upwork.index'}"
+              :to="{'name':'admin.rss.upwork.secrets'}"
             >
               <i class="fas fa-fingerprint text-blueGray-300 mr-2 text-sm"></i>
               My Secrets
