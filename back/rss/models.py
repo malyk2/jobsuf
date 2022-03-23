@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.functions import RandomUUID
 
 # Create your models here.
 
@@ -47,7 +48,9 @@ class Country(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 
-class Jobs(models.Model):
+class Job(models.Model):
+    # id = models.UUIDField(primary_key= True, default=TestUUID())
+    id = models.UUIDField(primary_key= True)
     title = models.CharField(max_length=255, null=True, default='')
     content = models.TextField(null=True)
     upwork_id = models.CharField(max_length=255, null=True, default='')

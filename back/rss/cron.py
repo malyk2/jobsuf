@@ -18,6 +18,11 @@ def get_real():
 def load_rss_upwork():
   print('load_rss_upwork');
 
+  # from .models import Job, Country
+  # from .models import Jobs
+
+  # job = Job.create()
+
   # entry = get_real()
   # entry = get_temp_entry1()
 
