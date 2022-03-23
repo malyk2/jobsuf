@@ -23,4 +23,5 @@ urlpatterns = [
     path('login', views.login),
     path('csrf', views.csrf),
     path('me', views.me),
+    path('logout', views.logout),
 ]
