@@ -49,8 +49,7 @@ class Country(models.Model):
 
 
 class Job(models.Model):
-    # id = models.UUIDField(primary_key= True, default=TestUUID())
-    id = models.UUIDField(primary_key= True)
+    id = models.UUIDField(primary_key= True, auto_created=True, default=RandomUUID)
     title = models.CharField(max_length=255, null=True, default='')
     content = models.TextField(null=True)
     upwork_id = models.CharField(max_length=255, null=True, default='')

@@ -1,4 +1,7 @@
 import feedparser
+# from rss.models import Job
+
+# from . import models
 
 # from rest_framework.renderers import JSONRenderer
 # from rest_framework.parsers import JSONParser
@@ -18,7 +21,10 @@ def get_real():
 def load_rss_upwork():
   print('load_rss_upwork');
 
-  # from .models import Job, Country
+  
+
+  # job = models.Job.objects.create();
+  # print(job.__dict__)
   # from .models import Jobs
 
   # job = Job.create()
