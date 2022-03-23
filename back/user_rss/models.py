@@ -25,3 +25,12 @@ class Upwork(models.Model):
 
     class Meta:
         ordering = ['created']
+
+
+class Secret(models.Model):
+    org_uid = models.CharField(max_length=100, blank=False)
+    security_token = models.CharField(max_length=100, blank=False)
+    user_uid = models.CharField(max_length=100, blank=False)
+
+    user = models.OneToOneField(
+        'auth.User', related_name='rss_secret', on_delete=models.CASCADE)

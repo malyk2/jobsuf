@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Upwork
+from .models import Upwork, Secret
 
 class UpworkSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField()
@@ -18,4 +18,13 @@ class UpworkSerializer(serializers.ModelSerializer):
             'user_id',
             'created',
             # 'user',
+        ]
+
+class SecretSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Secret
+        fields = [
+            'org_uid',
+            'security_token',
+            'user_uid',
         ]
