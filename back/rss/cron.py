@@ -15,7 +15,10 @@ def get_temp_entry1():
 
 
 def get_real_entries():
-    NewsFeed = feedparser.parse("https://www.upwork.com/ab/feed/jobs/rss?api_params=1&amp;orgUid=839771403425337346&amp;paging=0%3B10&amp;q=laravel&amp;securityToken=27727d8977665574fe85a05a7e51bcc55ca3560306362f8e4acfc5b567964c71a635de2658fa9bc6755d778144230199e22274f056989da0e1bae49e5ed49c79&amp;sort=recency&amp;userUid=839771403425337344")
+    # link = 'https://www.upwork.com/ab/feed/jobs/rss?api_params=1&amp;orgUid=839771403425337346&amp;paging=0%3B10&amp;q=laravel&amp;securityToken=27727d8977665574fe85a05a7e51bcc55ca3560306362f8e4acfc5b567964c71a635de2658fa9bc6755d778144230199e22274f056989da0e1bae49e5ed49c79&amp;sort=recency&amp;userUid=839771403425337344'
+    link = 'https://www.upwork.com/ab/feed/jobs/rss?api_params=1&orgUid=839771403425337346&paging=0%3B10&q=laravel&securityToken=27727d8977665574fe85a05a7e51bcc55ca3560306362f8e4acfc5b567964c71a635de2658fa9bc6755d778144230199e22274f056989da0e1bae49e5ed49c79&sort=recency&userUid=839771403425337344'
+    NewsFeed = feedparser.parse(link)
+
     # entry = NewsFeed.entries[1]
     return NewsFeed.entries
 
@@ -23,12 +26,12 @@ def get_real_entries():
 def load_rss_upwork():
     print('load_rss_upwork')
 
-    # entries = get_real_entries()
-    # for entry in entries:
-    #     handle_entry(entry)
+    entries = get_real_entries()
+    for entry in entries:
+        handle_entry(entry)
 
-    entry = get_temp_entry1()
-    handle_entry(entry)
+    # entry = get_temp_entry1()
+    # handle_entry(entry)
 
 
 def handle_entry(entry):
@@ -41,6 +44,10 @@ def handle_entry(entry):
             'upwork_id': entry['id'],
             'country': get_country(content),
         }
+        rates = get_rates(content)
+        if rates:
+            data = {**data, **rates}
+        
         Job.objects.create(**data)
 
 
@@ -58,6 +65,24 @@ def first_or_create_country(country_name):
     exists = Country.objects.filter(name=country_name).first()
     return exists and exists or Country.objects.create(name=country_name)
 
+def get_rates(content):
+    match = re.search(get_new_line_pattern('Hourly Range'), content)
+    if match:
+        rates_str = match.group(2).strip()
+        match_from_to = re.search('^\$(\d.\.00)-\$(\d.\.00)', rates_str)
+        if match_from_to:
+            return {
+                'rate_from': match_from_to.group(1).strip(),
+                'rate_to': match_from_to.group(2).strip()
+            }
+    #     return None
+    # else:
+    return None
+
+    return {
+        'rate_from': 11,
+        'rate_to': 15.1,
+    }
 
 def get_new_line_pattern(keyword):
     return f'.*(\\n.*{keyword}<\/b>:)(.*)\\n'

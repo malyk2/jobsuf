@@ -53,6 +53,8 @@ class Job(models.Model):
     title = models.CharField(max_length=255, null=True, default='')
     content = models.TextField(null=True)
     upwork_id = models.CharField(max_length=255, null=True, default='')
+    rate_from = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    rate_to = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     published = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     country = models.ForeignKey(
