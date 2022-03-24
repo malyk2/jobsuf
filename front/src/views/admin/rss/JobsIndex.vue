@@ -15,7 +15,9 @@
               <!-- <table-th> Type </table-th> -->
               <!-- <table-th> Topic </table-th> -->
               <!-- <table-th> Query </table-th> -->
-              <!-- <table-th> Active </table-th> -->
+              <!-- <table-th> Published </table-th> -->
+              <table-th> Country </table-th>
+              <table-th> Published </table-th>
               <table-th> Created </table-th>
             </tr>
           </thead>
@@ -23,8 +25,17 @@
             <tr v-for="item in items" :key="item.id">
               <!-- <table-td> {{ item.id }} </table-td> -->
               <table-td> {{ item.rss }} </table-td>
-              <table-td> {{ item.title }} </table-td>
+              <table-td> 
+                  <a :href="item.upwork_id" target="_blank" rel="noopener noreferrer" >
+                    <!-- test -->
+                    <!-- <i class="fas fa-external-link text-red-300 text-sm w-0.5"></i> -->
+                    <i class="fas fa-link text-sm"></i>
+                  </a>
+                  {{ item.title }} 
+              </table-td>
               <table-td> {{ item.rate_from ? '$'+item.rate_from+'-$'+item.rate_to : '' }} </table-td>
+              <table-td> {{ item.country }} </table-td>
+              <table-td> {{ item.published }} </table-td>
               <table-td> {{ item.created }} </table-td>
               <!-- <table-td> {{ item.title }} </table-td>
               <table-td> {{ item.topic }} </table-td>
@@ -67,7 +78,7 @@ export default {
     return {
       color: "light",
       items: [],
-      paginator: new Paginator(10),
+      paginator: new Paginator(15),
     };
   },
   components: {
