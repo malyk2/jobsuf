@@ -83,6 +83,16 @@
           <li class="items-center">
             <router-link
               class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+              :to="{'name':'admin.rss.jobs.index'}"
+            >
+              <i class="fas fa-inbox text-blueGray-300 mr-2 text-sm"></i>
+              Jobs
+            </router-link>
+          </li>
+
+          <li class="items-center">
+            <router-link
+              class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
               :to="{'name':'admin.rss.upwork.index'}"
             >
               <i class="fas fa-rss text-blueGray-300 mr-2 text-sm"></i>
