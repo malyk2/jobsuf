@@ -42,9 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'corsheaders',
-    'test',
-    # 'auth',
+    'django_crontab',
+    # 'test',
+    # 'auth.apps.AuthConfig',
+    'rss',
 ]
 
 MIDDLEWARE = [
@@ -89,12 +92,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'database',
-        # 'HOST': '127.0.0.1',
+        'HOST': env('DB_HOST', default='localhost'),
         'NAME': 'db',
         'PASSWORD': env('DB_PASSWORD', default='secret'),
-        'PASSWORD': 'secret',
-        'PORT': 5432,
+        'PORT': env('DB_PORT', default=5432),
         'USER': env('DB_USER', default='root'), 
     }
 }
@@ -141,10 +142,53 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+}
+
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+]
+CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
 ]
 # CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOW_CREDENTIALS=True
+
 CSRF_USE_SESSIONS=False
+
 CSRF_COOKIE_HTTPONLY=False
+
+#cron 
+
+CRONJOBS = [
+    ('*/5 * * * *', 'rss.cron.load_rss_upwork')
+]
+# python manage.py crontab add
+# python manage.py crontab show
+
+LOG_QUERY = env('LOG_QUERY', default=False)
+if LOG_QUERY: 
+    LOGGING = {
+        'version': 1,
+        'filters': {
+            'require_debug_true': {
+                '()': 'django.utils.log.RequireDebugTrue',
+            }
+        },
+        'handlers': {
+            'console': {
+                'level': 'DEBUG',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+            }
+        },
+        'loggers': {
+            'django.db.backends': {
+                'level': 'DEBUG',
+                'handlers': ['console'],
+            }
+        }
+    }

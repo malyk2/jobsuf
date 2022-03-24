@@ -19,6 +19,11 @@ import Index from './views/Index.vue'
 // Users
 // import UsersIndex from './views/admin/users/UsersIndex.vue'
 // import UsersForm from './views/admin/users/UsersForm.vue'
+// Rss
+import UpworkIndex from './views/admin/rss/UpworkIndex.vue'
+import UpworkForm from './views/admin/rss/UpworkForm.vue'
+import UpworkSecrets from './views/admin/rss/UpworkSecrets.vue'
+import JobsIndex from './views/admin/rss/JobsIndex.vue'
 // middlewares
 import { Auth as AuthMiddleware } from '@/middlewares/Auth'
 
@@ -38,26 +43,38 @@ const routes = [
         component: Dashboard,
         meta: { middleware: [new AuthMiddleware()] },
       },
-      // {
-      //   path: "/admin/users",
-      //   name: "admin.users.index",
-      //   component: UsersIndex,
-      //   meta: { middleware: [new AuthMiddleware()] },
-      // },
-      // {
-      //   path: "/admin/users/create",
-      //   name: "admin.users.create",
-      //   component: UsersForm,
-      //   props: {'id': null},
-      //   meta: { middleware: [new AuthMiddleware()] },
-      // },
-      // {
-      //   path: "/admin/users/:id",
-      //   name: "admin.users.edit",
-      //   component: UsersForm,
-      //   props: true,
-      //   meta: { middleware: [new AuthMiddleware()] },
-      // },
+      {
+        path: "/admin/rss/upwork",
+        name: "admin.rss.upwork.index",
+        component: UpworkIndex,
+        meta: { middleware: [new AuthMiddleware()] },
+      },
+      {
+        path: "/admin/rss/upwork/secrets",
+        name: "admin.rss.upwork.secrets",
+        component: UpworkSecrets,
+        meta: { middleware: [new AuthMiddleware()] },
+      },
+      {
+        path: "/admin/rss/upwork/create",
+        name: "admin.rss.upwork.create",
+        component: UpworkForm,
+        props: {'id': null},
+        meta: { middleware: [new AuthMiddleware()] },
+      },
+      {
+        path: "/admin/rss/upwork/:id",
+        name: "admin.rss.upwork.edit",
+        component: UpworkForm,
+        props: true,
+        meta: { middleware: [new AuthMiddleware()] },
+      },
+      {
+        path: "/admin/rss/jobs",
+        name: "admin.rss.jobs.index",
+        component: JobsIndex,
+        meta: { middleware: [new AuthMiddleware()] },
+      },
       {
         path: "/admin/settings",
         component: Settings,

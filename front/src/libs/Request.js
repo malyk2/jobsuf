@@ -68,6 +68,7 @@ class Request {
   }
 
   send(requestType, uri) {
+    axios.defaults.headers.common['X-CSRFToken'] = this.getCookie('csrftoken') || '';
     axios.defaults.withCredentials = true;
     return new Promise((resolve, reject) => {
       axios({

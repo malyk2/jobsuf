@@ -5,6 +5,7 @@ services:
       context: deploy
       dockerfile: app.docker
     command: python manage.py runserver 0.0.0.0:8000 > runlog.txt
+    # command: python -m debugpy --listen 0.0.0.0:3000 manage.py runserver 0.0.0.0:8000
     working_dir: /var/www
     # stdin_open: true
     # tty: true
@@ -12,7 +13,7 @@ services:
       - ./back:/var/www
     ports:
       - "8000:8000"
-      # - "3000:3000"
+      - "3000:3000"
   database:
     image: postgres:14
     environment:
@@ -26,8 +27,8 @@ services:
       dockerfile: front.docker
     command: npm run serve
     working_dir: /var/www
-    stdin_open: true
-    tty: true
+    # stdin_open: true
+    # tty: true
     volumes:
       - ./front:/var/www
     ports:
