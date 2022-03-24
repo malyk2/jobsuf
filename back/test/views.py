@@ -17,14 +17,18 @@ from django.forms.models import model_to_dict
 # @ensure_csrf_cookie
 @api_view(['GET', 'POST'])
 def test(request, format=None):
+    
+    job = Job.objects.get(pk='fc4dd68a-fbae-4934-915b-fd728f3afc36')
+    print(job.skills)
+
     # country = Country.objects.create()
-    country = Country.objects.filter(name='Test contry').last()
-    job = Job.objects.create(country=country)
+    # country = Country.objects.filter(name='Test contry').last()
+    # job = Job.objects.create(country=country)
     # job = Job.objects.get(pk='fb953407-1622-4759-8095-f43fee09caf9')
 
-    data = {
-        'title': 'test title',
-    }
+    # data = {
+    #     'title': 'test title',
+    # }
     # job = Job.objects.create(**data);
     # country = job.country.create()
     # print(job.__dict__)
