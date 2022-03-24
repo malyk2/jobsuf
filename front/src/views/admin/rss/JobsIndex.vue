@@ -7,51 +7,48 @@
       <div class="block w-full overflow-x-auto">
         <table class="items-center w-full bg-transparent border-collapse">
           <thead>
-            <tr>
-              <!-- <table-th> ID </table-th> -->
+            <!-- <tr>
               <table-th> Rss </table-th>
               <table-th> Title </table-th>
               <table-th> Rate </table-th>
-              <!-- <table-th> Type </table-th> -->
-              <!-- <table-th> Topic </table-th> -->
-              <!-- <table-th> Query </table-th> -->
-              <!-- <table-th> Published </table-th> -->
               <table-th> Country </table-th>
               <table-th> Published </table-th>
               <table-th> Created </table-th>
-            </tr>
+            </tr> -->
           </thead>
           <tbody>
-            <tr v-for="item in items" :key="item.id">
-              <!-- <table-td> {{ item.id }} </table-td> -->
-              <table-td> {{ item.rss }} </table-td>
-              <table-td> 
-                  <a :href="item.upwork_id" target="_blank" rel="noopener noreferrer" >
-                    <!-- test -->
-                    <!-- <i class="fas fa-external-link text-red-300 text-sm w-0.5"></i> -->
+            <template v-for="item in items" :key="item.id">
+              <tr>
+                <table-td class="w-3/4">
+                  <a
+                    :href="item.upwork_id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <i class="fas fa-link text-sm"></i>
                   </a>
-                  {{ item.title }} 
-              </table-td>
-              <table-td> {{ item.rate_from ? '$'+item.rate_from+'-$'+item.rate_to : '' }} </table-td>
-              <table-td> {{ item.country }} </table-td>
-              <table-td> {{ item.published }} </table-td>
-              <table-td> {{ item.created }} </table-td>
-              <!-- <table-td> {{ item.title }} </table-td>
-              <table-td> {{ item.topic }} </table-td>
-              <table-td> {{ item.q }} </table-td>
-              <table-td> {{ item.active }} </table-td> -->
-              <!-- <table-td>
-                <table-dropdown>
-                  <table-dropdown-link @click="gotoForm(item)">
-                    Update
-                  </table-dropdown-link>
-                  <table-dropdown-link @click="deleteItem(item)">
-                    Delete
-                  </table-dropdown-link>
-                </table-dropdown>
-              </table-td> -->
-            </tr>
+                  <span @click="toggleShowDetail(item.id)">
+                    {{ item.title }}
+                  </span>
+                </table-td>
+                <table-td>
+                  {{
+                    item.rate_from
+                      ? "$" + item.rate_from + "-$" + item.rate_to
+                      : "No rate"
+                  }}
+                </table-td>
+                <table-td> {{ item.created }} </table-td>
+              </tr>
+              <tr v-show="isShowedDetail(item.id)">
+                <table-td v-html="item.content" colspan=3> </table-td>
+                <!-- <table-td>
+                  {{ item.rss }}<br />
+                  {{ item.country }}
+                </table-td>
+                <table-td> {{ item.published }} </table-td> -->
+              </tr>
+            </template>
           </tbody>
         </table>
         <div class="mx-auto">
@@ -79,6 +76,7 @@ export default {
       color: "light",
       items: [],
       paginator: new Paginator(15),
+      showedIds: [],
     };
   },
   components: {
@@ -100,6 +98,19 @@ export default {
         this.items = response.results;
         this.paginator.setCount(response.count);
       });
+    },
+    toggleShowDetail(id) {
+      if (this.isShowedDetail(id)) {
+        const index = this.showedIds.indexOf(id);
+        if (index > -1) {
+          this.showedIds.splice(index, 1);
+        }
+      } else {
+        this.showedIds.push(id)
+      }
+    },
+    isShowedDetail(id) {
+      return this.showedIds.includes(id);
     },
   },
   computed: {

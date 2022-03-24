@@ -6,7 +6,6 @@
       align-middle
       border-l-0 border-r-0
       text-xs
-      whitespace-nowrap
       p-4
     "
   >
