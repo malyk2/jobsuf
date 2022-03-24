@@ -9,8 +9,8 @@ from django.contrib.postgres.functions import RandomUUID
 
 
 TYPE_CHOICES = [
-    ('topic', 'topic'),
-    ('job', 'job'),
+    ('topics', 'topics'),
+    ('jobs', 'jobs'),
 ]
 
 TOPIC_CHOICES = [

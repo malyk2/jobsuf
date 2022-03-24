@@ -78,7 +78,7 @@ export default {
         q: "",
         active: false,
       }),
-      types: ["topic", "job"],
+      types: ["topics", "jobs"],
       topics: ["most-recent", "best-matches"],
     };
   },
