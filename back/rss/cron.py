@@ -1,10 +1,11 @@
 import feedparser
 import re
 import datetime
+from urllib import parse
 # import re
 # from rss.models import Job
 
-from rss.models import Job, Country
+from rss.models import Job, Country, Upwork
 
 
 # from rest_framework.renderers import JSONRenderer
@@ -28,21 +29,59 @@ def get_real_entries():
 def load_rss_upwork():
     print('load_rss_upwork')
 
+    rsss = get_user_rss()
+    for user_rss in rsss:
+        rss_url = get_rss_url(user_rss)
+        entries = get_entries(rss_url)
+        for entry in entries:
+            handle_entry(user_rss, entry)
+    # print(rsss.count())
+
     # entries = get_real_entries()
     # for entry in entries:
     #     handle_entry(entry)
 
     # print(parse_published_date('Tue, 22 Mar 2022 20:59:37 +0000'))
 
-    entry = get_temp_entry1()
-    handle_entry(entry)
+    # entry = get_temp_entry1()
+    # handle_entry(entry)
 
 
-def handle_entry(entry):
+def get_user_rss():
+    return Upwork.objects.filter(active=True, user__rss_secret__isnull=False).select_related('user').prefetch_related('user', 'user__rss_secret').exclude().all()
+
+
+def get_rss_url(user_rss):
+    url = f'https://www.upwork.com/ab/feed/{user_rss.type}/rss?'
+    user_secret = user_rss.user.rss_secret
+    params = {
+        'orgUid': user_secret.org_uid,
+        'securityToken': user_secret.security_token,
+        'userUid': user_secret.user_uid,
+    }
+
+    if user_rss.type == 'topics':
+        params['topic'] = user_rss.topic
+    elif user_rss.type == 'jobs':
+        params['api_params'] = 1
+        params['sort'] = 'recency'
+        params['q'] = user_rss.q
+
+    url += parse.urlencode(params)
+
+    return url
+
+def get_entries(rss_url):
+    NewsFeed = feedparser.parse(rss_url)
+    return NewsFeed.entries
+
+
+def handle_entry(user_rss, entry):
     upwork_id = entry['id']
     if not Job.objects.filter(upwork_id=upwork_id).exists():
         content = entry['content'][0]['value']
         data = {
+            'rss': user_rss,
             'title': entry['title'],
             'content': content,
             'upwork_id': entry['id'],
