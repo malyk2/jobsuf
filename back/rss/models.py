@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.postgres.functions import RandomUUID
-
+import uuid
 # Create your models here.
 
 # class Country(models.Model):
@@ -49,7 +49,8 @@ class Country(models.Model):
 
 
 class Job(models.Model):
-    id = models.UUIDField(primary_key= True, auto_created=True, default=RandomUUID)
+    # id = models.UUIDField(primary_key= True, default=RandomUUID)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255, null=True, default='')
     content = models.TextField(null=True)
     upwork_id = models.CharField(max_length=255, null=True, default='')
@@ -61,3 +62,7 @@ class Job(models.Model):
         'rss.Country', related_name='country', null=True, on_delete=models.SET_NULL)
     rss = models.ForeignKey(
         'rss.Upwork', related_name='rss', null=True, on_delete=models.SET_NULL)
+
+class Skill(models.Model):
+    name = models.CharField(max_length=255, blank=False)
+    jobs = models.ManyToManyField(Job, related_name='skills')
