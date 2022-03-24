@@ -1,5 +1,7 @@
 import feedparser
 import re
+import datetime
+# import re
 # from rss.models import Job
 
 from rss.models import Job, Country
@@ -26,12 +28,14 @@ def get_real_entries():
 def load_rss_upwork():
     print('load_rss_upwork')
 
-    entries = get_real_entries()
-    for entry in entries:
-        handle_entry(entry)
+    # entries = get_real_entries()
+    # for entry in entries:
+    #     handle_entry(entry)
 
-    # entry = get_temp_entry1()
-    # handle_entry(entry)
+    # print(parse_published_date('Tue, 22 Mar 2022 20:59:37 +0000'))
+
+    entry = get_temp_entry1()
+    handle_entry(entry)
 
 
 def handle_entry(entry):
@@ -43,11 +47,12 @@ def handle_entry(entry):
             'content': content,
             'upwork_id': entry['id'],
             'country': get_country(content),
+            'published': parse_published_date(entry['published']),
         }
         rates = get_rates(content)
         if rates:
             data = {**data, **rates}
-        
+
         Job.objects.create(**data)
 
 
@@ -65,6 +70,7 @@ def first_or_create_country(country_name):
     exists = Country.objects.filter(name=country_name).first()
     return exists and exists or Country.objects.create(name=country_name)
 
+
 def get_rates(content):
     match = re.search(get_new_line_pattern('Hourly Range'), content)
     if match:
@@ -75,14 +81,16 @@ def get_rates(content):
                 'rate_from': match_from_to.group(1).strip(),
                 'rate_to': match_from_to.group(2).strip()
             }
-    #     return None
-    # else:
     return None
 
-    return {
-        'rate_from': 11,
-        'rate_to': 15.1,
-    }
+
+def parse_published_date(date_str):
+    date_format = '%a, %d %b %Y %H:%M:%S %z'
+    try:
+        return datetime.datetime.strptime(date_str, date_format)
+    except:
+        return None
+
 
 def get_new_line_pattern(keyword):
     return f'.*(\\n.*{keyword}<\/b>:)(.*)\\n'
