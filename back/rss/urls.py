@@ -17,4 +17,6 @@ router.register(r'upwork', views.UpworkViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('secret/', views.SecretGetSave.as_view()),
+    path('jobs/', views.JobList.as_view()),
+
 ]

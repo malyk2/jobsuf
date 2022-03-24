@@ -1,8 +1,8 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics, mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UpworkSerializer, SecretSerializer
-from .models import Upwork, Secret
+from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer
+from .models import Upwork, Secret, Job
 from django.core import serializers
 
 
@@ -16,6 +16,15 @@ class UpworkViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class JobList(generics.ListAPIView):
+    queryset = Job.objects.all()
+    serializer_class = JobListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Job.objects.prefetch_related('country', 'rss', 'skills').filter(rss__user_id=self.request.user.id).order_by('-created').all()
 
 
 class SecretGetSave(APIView):
