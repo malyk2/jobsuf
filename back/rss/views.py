@@ -31,7 +31,9 @@ class JobList(generics.ListAPIView):
             'rss',
             'skills',
             Prefetch('readed_users', User.objects.filter(
-                id=self.request.user.id), 'readed_auth_user')
+                id=self.request.user.id), 'readed_auth_user'),
+            Prefetch('favourited_users', User.objects.filter(
+                id=self.request.user.id), 'favourited_auth_user'),
         ).filter(rss__user_id=self.request.user.id).order_by('-created').all()
 
 

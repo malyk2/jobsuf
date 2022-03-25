@@ -51,6 +51,7 @@ class JobListSerializer(serializers.ModelSerializer):
         slug_field='name',
     )
     is_readed_by_auth_user = serializers.SerializerMethodField()
+    is_favourited = serializers.SerializerMethodField()
     created = serializers.DateTimeField(
         default_timezone=timezone(settings.FRONT_TIME_ZONE))
 
@@ -70,10 +71,13 @@ class JobListSerializer(serializers.ModelSerializer):
             'rss',
             'skills',
             'is_readed_by_auth_user',
+            'is_favourited',
         ]
 
     def get_is_readed_by_auth_user(self, job):
         return bool(job.readed_auth_user)  # from view's Prefetch
+    def get_is_favourited(self, job):
+        return bool(job.favourited_auth_user)  # from view's Prefetch
 
 
 class JobMarkReadSerializer(serializers.Serializer):
