@@ -1,5 +1,5 @@
 from rss.models import Job
-from rss.serializers import JobTestSerializer
+from rss.serializers import JobMarkReadSerializer
 from django.db.models import Prefetch
 from django.contrib.auth.models import User
 from django.db.models import Count
@@ -14,19 +14,19 @@ def test_command_1():
 # prefetch_related
     # job = jobs[1]
 
-    job = Job.objects.prefetch_related(Prefetch('readed_users', User.objects.filter(id=2), 'readed_auth_user')).get(pk='18791b80-b86a-4715-b325-aa1924667801')
+    # job = Job.objects.prefetch_related(Prefetch('readed_users', User.objects.filter(id=2), 'readed_auth_user')).get(pk='18791b80-b86a-4715-b325-aa1924667801')
     # print(job.readed_auth_user)
 
     # data = JobTestSerializer(job).data
 
     # print(data)
-    job = Job.objects.annotate(Count('readed_users')).get(pk='18791b80-b86a-4715-b325-aa1924667801')
+    # job = Job.objects.annotate(Count('readed_users')).get(pk='18791b80-b86a-4715-b325-aa1924667801')
 
-    print(job)
+    # print(job)
 
     # print(job.readed_users.all())
 
 
 
-    # job.readed_users.add(2)
 
+    

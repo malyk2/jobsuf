@@ -20,8 +20,10 @@
             <template v-for="item in items" :key="item.id">
               <tr
                 :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
+                @click="toggleShowDetail(item.id)"
               >
-                <table-td class="w-3/4">
+                <table-td class="w-9/12">
+                  {{ item.title }}
                   <a
                     :href="item.upwork_id"
                     target="_blank"
@@ -29,9 +31,6 @@
                   >
                     <i class="fas fa-link text-sm"></i>
                   </a>
-                  <span @click="toggleShowDetail(item.id)">
-                    {{ item.title }}
-                  </span>
                 </table-td>
                 <table-td>
                   {{
@@ -43,7 +42,14 @@
                 <table-td> {{ item.created }} </table-td>
               </tr>
               <tr v-show="isShowedDetail(item.id)">
-                <table-td v-html="item.content" colspan="3"> </table-td>
+                <table-td v-html="item.content" colspan="2"> </table-td>
+                <table-td>
+                  <div>
+                    <button-base color="info">
+                      <i class="fas fa-link text-sm"></i>
+                    </button-base>
+                  </div>
+                </table-td>
                 <!-- <table-td>
                   {{ item.rss }}<br />
                   {{ item.country }}
@@ -96,10 +102,22 @@ export default {
   },
   methods: {
     getItems() {
-      api.indexJobs(this.listQuery).then((response) => {
+      api.jobsIndex(this.listQuery).then((response) => {
         this.items = response.results;
         this.paginator.setCount(response.count);
       });
+    },
+    markAssRead(ids) {
+      // const data = ids.map((id) => ({'id': id}))
+      // api.jobsMarkAsRead(data).then((response) => {
+      //   ids.forEach(id => {
+      //     let item = this.items.find(i => {id == i.id})
+      //     if(item) {
+      //       item.is_readed_by_auth_user = true
+      //     }
+      //   });
+      // });
+      
     },
     toggleShowDetail(id) {
       if (this.isShowedDetail(id)) {
@@ -109,11 +127,23 @@ export default {
         }
       } else {
         this.showedIds.push(id);
+        // console.log(this.items);
+        let x = this.items.find(i => {id == i.id})
+
+        console.log('Current');
+        // console.log('Current');
+        console.log(x);
+        // console.log(item.is_readed_by_auth_user);
+        // item
+        // if(item && !item.is_readed_by_auth_user) {
+        //   this.markAssRead([id])
+        // }
       }
     },
     isShowedDetail(id) {
       return this.showedIds.includes(id);
     },
+
   },
   computed: {
     listQuery() {

@@ -1,7 +1,7 @@
-from rest_framework import viewsets, permissions, generics, mixins
+from rest_framework import viewsets, permissions, generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer
+from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, JobMarkReadSerializer
 from .models import Upwork, Secret, Job
 from django.core import serializers
 from django.db.models import Prefetch
@@ -33,6 +33,18 @@ class JobList(generics.ListAPIView):
             Prefetch('readed_users', User.objects.filter(
                 id=self.request.user.id), 'readed_auth_user')
         ).filter(rss__user_id=self.request.user.id).order_by('-created').all()
+
+
+class JobMarkRead(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request, format=None):
+        serializer = JobMarkReadSerializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        me=request.user
+        for item in serializer.validated_data:
+            me.readed_rss_jobs.add(item.get('id'))
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class SecretGetSave(APIView):

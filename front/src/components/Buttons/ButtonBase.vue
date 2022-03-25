@@ -29,7 +29,7 @@ export default {
     color: {
       default: "success",
       validator: function (value) {
-        return ["success"].indexOf(value) !== -1;
+        return ['success', 'info'].indexOf(value) !== -1;
       },
     },
     type: {
@@ -49,6 +49,9 @@ export default {
       switch (this.color) {
         case 'success':
           return ['bg-emerald-500', 'text-white', 'active:bg-emerald-600'];
+          break;
+        case 'info':
+          return ['bg-amber-300', 'text-white', 'active:bg-amber-400'];
           break;
         default:
           return [];
