@@ -8,10 +8,7 @@
         <table class="items-center w-full bg-transparent border-collapse">
           <tbody>
             <template v-for="item in items" :key="item.id">
-              <tr
-                :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
-                @click="toggleShowDetail(item.id)"
-              >
+              <tr :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }">
                 <table-td class="w-9/12">
                   {{ item.title }}
                   <a
@@ -23,7 +20,24 @@
                   </a>
                   <div class="float-right">
                     <button-base
-                      :color="item.is_readed_by_auth_user ? 'danger' : 'info'"
+                      color="info"
+                      size="mini"
+                      title="Show detail"
+                      @click="toggleShowDetail(item.id)"
+                    >
+                      <i
+                        :class="
+                          isShowedDetail(item.id)
+                            ? 'fa fa-arrow-circle-up'
+                            : 'fa fa-arrow-circle-down'
+                            
+                        "
+                      ></i>
+                    </button-base>
+                    <button-base
+                      :color="
+                        item.is_readed_by_auth_user ? 'danger' : 'warning'
+                      "
                       size="mini"
                       :title="
                         item.is_readed_by_auth_user
@@ -41,7 +55,7 @@
                       ></i>
                     </button-base>
                     <button-base
-                      :color="item.is_favourited ? 'success' : 'info'"
+                      :color="item.is_favourited ? 'success' : 'warning'"
                       size="mini"
                       :title="
                         item.is_favourited
