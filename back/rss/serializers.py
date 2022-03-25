@@ -1,5 +1,7 @@
+from pytz import timezone
 from rest_framework import serializers
 from .models import Upwork, Secret, Job, Country
+from django.conf import settings
 
 
 class UpworkSerializer(serializers.ModelSerializer):
@@ -49,6 +51,8 @@ class JobListSerializer(serializers.ModelSerializer):
         slug_field='name',
     )
     is_readed_by_auth_user = serializers.SerializerMethodField()
+    created = serializers.DateTimeField(
+        default_timezone=timezone(settings.FRONT_TIME_ZONE))
 
     class Meta:
         model = Job
