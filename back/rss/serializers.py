@@ -79,3 +79,8 @@ class JobListSerializer(serializers.ModelSerializer):
 class JobMarkReadSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     readed = serializers.BooleanField()
+
+class JobMarkFavouriteSerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+    favourited = serializers.BooleanField()
+    rate = serializers.IntegerField(min_value=0, max_value=5, required=False)
