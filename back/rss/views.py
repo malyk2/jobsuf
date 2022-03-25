@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer
 from .models import Upwork, Secret, Job
 from django.core import serializers
+from django.db.models import Prefetch
+from django.contrib.auth.models import User
 
 
 class UpworkViewSet(viewsets.ModelViewSet):
@@ -24,7 +26,13 @@ class JobList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Job.objects.prefetch_related('country', 'rss', 'skills').filter(rss__user_id=self.request.user.id).order_by('-created').all()
+        return Job.objects.prefetch_related(
+            'country',
+            'rss',
+            'skills',
+            Prefetch('readed_users', User.objects.filter(
+                id=self.request.user.id), 'readed_auth_user')
+        ).filter(rss__user_id=self.request.user.id).order_by('-created').all()
 
 
 class SecretGetSave(APIView):

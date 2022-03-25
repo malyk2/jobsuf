@@ -18,7 +18,9 @@
           </thead>
           <tbody>
             <template v-for="item in items" :key="item.id">
-              <tr>
+              <tr
+                :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
+              >
                 <table-td class="w-3/4">
                   <a
                     :href="item.upwork_id"
@@ -41,7 +43,7 @@
                 <table-td> {{ item.created }} </table-td>
               </tr>
               <tr v-show="isShowedDetail(item.id)">
-                <table-td v-html="item.content" colspan=3> </table-td>
+                <table-td v-html="item.content" colspan="3"> </table-td>
                 <!-- <table-td>
                   {{ item.rss }}<br />
                   {{ item.country }}
@@ -106,7 +108,7 @@ export default {
           this.showedIds.splice(index, 1);
         }
       } else {
-        this.showedIds.push(id)
+        this.showedIds.push(id);
       }
     },
     isShowedDetail(id) {
