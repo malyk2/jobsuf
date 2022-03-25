@@ -59,6 +59,7 @@ class JobListSerializer(serializers.ModelSerializer):
             'upwork_id',
             'rate_from',
             'rate_to',
+            'budget',
             'published',
             'created',
             'country',

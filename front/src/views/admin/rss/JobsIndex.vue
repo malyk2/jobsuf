@@ -26,12 +26,15 @@
                   <div>
                     {{
                       item.rate_from
-                        ? "$" + item.rate_from + "-$" + item.rate_to
-                        : "No rate"
+                        ? "Rate: $" + item.rate_from + "-$" + item.rate_to
+                        : item.budget ? "Budget: "+ item.budget : "No rate"
                     }}
                   </div>
                   <div>
                     {{ item.rss }}
+                  </div>
+                  <div>
+                    {{ item.country }}
                   </div>
                 </table-td>
                 <table-td> {{ item.created }} </table-td>
