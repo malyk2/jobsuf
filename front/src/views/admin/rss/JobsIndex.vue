@@ -108,7 +108,6 @@ export default {
       const data = ids.map((id) => ({ id: id, readed: readed }));
       api.jobsMarkRead(data).then((response) => {
         ids.forEach((id) => {
-          // this.setIsReaded(id, readedd)
           let item = this.items.find((item) => item.id == id);
           if (item) {
             item.is_readed_by_auth_user = readed;
