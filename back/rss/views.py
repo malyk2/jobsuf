@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, JobMarkReadSerializer
+from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, JobMarkReadSerializer, JobMarkFavouriteSerializer
 from .models import Upwork, Secret, Job
 from django.core import serializers
 from django.db.models import Prefetch
@@ -31,7 +31,9 @@ class JobList(generics.ListAPIView):
             'rss',
             'skills',
             Prefetch('readed_users', User.objects.filter(
-                id=self.request.user.id), 'readed_auth_user')
+                id=self.request.user.id), 'readed_auth_user'),
+            Prefetch('favourited_users', User.objects.filter(
+                id=self.request.user.id), 'favourited_auth_user'),
         ).filter(rss__user_id=self.request.user.id).order_by('-created').all()
 
 
@@ -41,11 +43,35 @@ class JobMarkRead(APIView):
     def put(self, request, format=None):
         serializer = JobMarkReadSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
-        me=request.user
+        me = request.user
         for item in serializer.validated_data:
-            item.get('readed') and me.readed_rss_jobs.add(item.get('id')) or me.readed_rss_jobs.remove(item.get('id'))
-            
+            id = item.get('id')
+            if item.get('readed'):
+                me.readed_rss_jobs.add(id)
+            else:
+                me.readed_rss_jobs.remove(id)
+
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class JobMarkFavourite(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request, format=None):
+        serializer = JobMarkFavouriteSerializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        me = request.user
+        for item in serializer.validated_data:
+            if item.get('favourited'):
+                rate = item.get('rate')
+                through_defaults = rate and {'rate': rate} or None
+                me.favourited_rss_jobs.add(
+                    item.get('id'), through_defaults=through_defaults)
+            else:
+                me.favourited_rss_jobs.remove(item.get('id'))
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class SecretGetSave(APIView):
     permission_classes = [permissions.IsAuthenticated]

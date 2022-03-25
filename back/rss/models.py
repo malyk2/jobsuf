@@ -56,14 +56,29 @@ class Job(models.Model):
     upwork_id = models.CharField(max_length=255, null=True, default='')
     rate_from = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     rate_to = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    budget = models.PositiveSmallIntegerField(null=True)
     published = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     country = models.ForeignKey(
         'rss.Country', related_name='country', null=True, on_delete=models.SET_NULL)
     rss = models.ForeignKey(
         'rss.Upwork', related_name='rss', null=True, on_delete=models.SET_NULL)
-    readed_users = models.ManyToManyField('auth.User', related_name='readed_rss_jobs')
+    readed_users = models.ManyToManyField(
+        'auth.User', related_name='readed_rss_jobs')
+    favourited_users = models.ManyToManyField(
+        'auth.User', related_name='favourited_rss_jobs', through='JobFavouritedUsers')
+
 
 class Skill(models.Model):
     name = models.CharField(max_length=255, blank=False)
     jobs = models.ManyToManyField(Job, related_name='skills')
+
+
+class JobFavouritedUsers(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    group = models.ForeignKey(Job, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    rate = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        db_table = 'rss_job_favourited_users'

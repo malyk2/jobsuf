@@ -292,7 +292,7 @@ export default {
         this.form.errors.clear();
         this.form.busy = true;
         this.login(this.form.data())
-          .then((data) => {
+          .then(() => {
             this.form.onSuccess();
             this.$router.push("/admin/dashboard");
           })

@@ -147,7 +147,7 @@ export default {
   methods: {
     ...mapActions("auth", ["logout"]),
     runLogout: function () {
-      this.logout().then((response) => {
+      this.logout().then(() => {
         this.$router.push({'name': 'admin.login'});
       });
     },

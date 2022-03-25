@@ -70,6 +70,9 @@ const rssUpwork = {
   jobsMarkRead(data) {
     return new Request(data).put("rss/jobs/read/");
   },
+  jobsMarkFavourite(data) {
+    return new Request(data).put("rss/jobs/favourite/");
+  },
   
 }
 

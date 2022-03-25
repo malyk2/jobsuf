@@ -19,5 +19,6 @@ urlpatterns = [
     path('secret/', views.SecretGetSave.as_view()),
     path('jobs/', views.JobList.as_view()),
     path('jobs/read/', views.JobMarkRead.as_view()),
+    path('jobs/favourite/', views.JobMarkFavourite.as_view()),
 
 ]

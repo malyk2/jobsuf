@@ -77,6 +77,7 @@ def handle_entry(user_rss, entry):
             'upwork_id': entry['id'],
             'country': get_country(content),
             'published': parse_published_date(entry['published']),
+            'budget': get_budget(content),
         }
         rates = get_rates(content)
         if rates:
@@ -97,6 +98,21 @@ def get_country(content):
         return None
 
 
+def first_or_create_country(country_name):
+    exists = Country.objects.filter(name=country_name).first()
+    return exists and exists or Country.objects.create(name=country_name)
+
+
+def get_budget(content):
+    pattern = get_new_line_pattern('Budget')
+    match = re.search(pattern, content)
+    if match:
+        match_budget = re.search('^\$([\d,]*)', match.group(2).strip())
+        if match_budget:
+            return match_budget.group(1).replace(',', '')
+    return None
+
+
 def get_skill_names(content):
     pattern = get_new_line_pattern('Skills')
     match = re.search(pattern, content)
@@ -114,11 +130,6 @@ def get_skill_ids(skill_names):
             skill, created = Skill.objects.get_or_create(name=skill_name)
             skill_ids.append(skill.id)
     return skill_ids
-
-
-def first_or_create_country(country_name):
-    exists = Country.objects.filter(name=country_name).first()
-    return exists and exists or Country.objects.create(name=country_name)
 
 
 def get_rates(content):

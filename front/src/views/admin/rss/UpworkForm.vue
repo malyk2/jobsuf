@@ -98,7 +98,7 @@ export default {
             const data = response;
             this.form.addParam(data);
           })
-          .catch((response) => {
+          .catch(() => {
             this.goToList();
           });
       } else {
@@ -118,7 +118,7 @@ export default {
         request = api.update(this.id, data);
       }
       request
-        .then((response) => {
+        .then(() => {
           this.goToList();
         })
         .catch((response) => {

@@ -27,7 +27,7 @@ export default {
     color: {
       default: "success",
       validator: function (value) {
-        return ["success", "info", "danger"].indexOf(value) !== -1;
+        return ["success", "info", "warning", "danger"].indexOf(value) !== -1;
       },
     },
     size: {
@@ -52,8 +52,10 @@ export default {
       switch (this.color) {
         case "success":
           return ["bg-emerald-500", "text-white", "active:bg-emerald-600"];
-        case "info":
+        case "warning":
           return ["bg-amber-500", "text-white", "active:bg-amber-600"];
+        case "info":
+          return ["bg-blue-500", "text-white", "active:bg-blue-600"];
         case "danger":
           return ["bg-red-500", "text-white", "active:bg-red-600"];
         default:

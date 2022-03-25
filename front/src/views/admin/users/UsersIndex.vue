@@ -41,7 +41,6 @@
   </card-base>
 </template>
 <script>
-import CardHeader from "@/components/Cards/CardHeader.vue";
 import CardBase from "@/components/Cards/CardBase.vue";
 import ButtonBase from "@/components/Buttons/ButtonBase.vue";
 import TableTh from "@/components/Table/TableTh.vue";
@@ -61,7 +60,6 @@ export default {
   },
   components: {
     CardBase,
-    CardHeader,
     ButtonBase,
     TableDropdown,
     TableDropdownLink,
@@ -83,7 +81,7 @@ export default {
       this.$router.push({name:'admin.users.edit', params:{id: user.id}})
     },
     deleteUser(user) {
-      api.delete(user.id).then(response => {
+      api.delete(user.id).then(() => {
         const index = this.users.findIndex(i => i.id == user.id);
         if (index > -1) {
           this.users.splice(index, 1);

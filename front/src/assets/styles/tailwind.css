@@ -1278,6 +1278,11 @@ select {
   background-color: rgba(99, 102, 241, var(--tw-bg-opacity));
 }
 
+.bg-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(59, 130, 246, var(--tw-bg-opacity));
+}
+
 .bg-lightBlue-200 {
   --tw-bg-opacity: 1;
   background-color: rgba(186, 230, 253, var(--tw-bg-opacity));
@@ -1441,6 +1446,11 @@ select {
 .active\:bg-indigo-600:active {
   --tw-bg-opacity: 1;
   background-color: rgba(79, 70, 229, var(--tw-bg-opacity));
+}
+
+.active\:bg-blue-600:active {
+  --tw-bg-opacity: 1;
+  background-color: rgba(37, 99, 235, var(--tw-bg-opacity));
 }
 
 .active\:bg-emerald-600:active {

@@ -11,7 +11,6 @@ class Request {
   constructor(data = {}) {
     this.data = data;
     this.params = {};
-    self = this
   }
 
   setParams(params = {}) {

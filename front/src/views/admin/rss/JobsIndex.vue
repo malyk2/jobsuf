@@ -8,10 +8,7 @@
         <table class="items-center w-full bg-transparent border-collapse">
           <tbody>
             <template v-for="item in items" :key="item.id">
-              <tr
-                :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
-                @click="toggleShowDetail(item.id)"
-              >
+              <tr :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }">
                 <table-td class="w-9/12">
                   {{ item.title }}
                   <a
@@ -21,25 +18,26 @@
                   >
                     <i class="fas fa-link text-sm"></i>
                   </a>
-                </table-td>
-                <table-td>
-                  {{
-                    item.rate_from
-                      ? "$" + item.rate_from + "-$" + item.rate_to
-                      : "No rate"
-                  }}
-                </table-td>
-                <table-td> {{ item.created }} </table-td>
-              </tr>
-              <tr
-                v-show="isShowedDetail(item.id)"
-                :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
-              >
-                <table-td v-html="item.content" colspan="2"> </table-td>
-                <table-td>
-                  <div>
+                  <div class="float-right">
                     <button-base
-                      :color="item.is_readed_by_auth_user ? 'danger' : 'info'"
+                      color="info"
+                      size="mini"
+                      title="Show detail"
+                      @click="toggleShowDetail(item.id)"
+                    >
+                      <i
+                        :class="
+                          isShowedDetail(item.id)
+                            ? 'fa fa-arrow-circle-up'
+                            : 'fa fa-arrow-circle-down'
+                            
+                        "
+                      ></i>
+                    </button-base>
+                    <button-base
+                      :color="
+                        item.is_readed_by_auth_user ? 'danger' : 'warning'
+                      "
                       size="mini"
                       :title="
                         item.is_readed_by_auth_user
@@ -48,10 +46,52 @@
                       "
                       @click="markRead([item.id], !item.is_readed_by_auth_user)"
                     >
-                      <i class="fas fa-book text-sm"></i>
+                      <i
+                        :class="
+                          item.is_readed_by_auth_user
+                            ? 'fas fa-eye-slash'
+                            : 'fas fa-eye'
+                        "
+                      ></i>
+                    </button-base>
+                    <button-base
+                      :color="item.is_favourited ? 'success' : 'warning'"
+                      size="mini"
+                      :title="
+                        item.is_favourited
+                          ? 'Mark as favourite'
+                          : 'Mark as unfavourite'
+                      "
+                      @click="markFavourite([item.id], !item.is_favourited)"
+                    >
+                      <i class="fas fa-heart"></i>
                     </button-base>
                   </div>
                 </table-td>
+                <table-td>
+                  <div>
+                    {{
+                      item.rate_from
+                        ? "Rate: $" + item.rate_from + "-$" + item.rate_to
+                        : item.budget
+                        ? "Budget: " + item.budget
+                        : "No rate"
+                    }}
+                  </div>
+                  <div>
+                    {{ item.rss }}
+                  </div>
+                  <div>
+                    {{ item.country }}
+                  </div>
+                </table-td>
+                <table-td> {{ item.created }} </table-td>
+              </tr>
+              <tr
+                v-show="isShowedDetail(item.id)"
+                :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
+              >
+                <table-td v-html="item.content" colspan="3"> </table-td>
               </tr>
             </template>
           </tbody>
@@ -64,13 +104,9 @@
   </div>
 </template>
 <script>
-import CardHeader from "@/components/Cards/CardHeader.vue";
 import CardBase from "@/components/Cards/CardBase.vue";
 import ButtonBase from "@/components/Buttons/ButtonBase.vue";
-import TableTh from "@/components/Table/TableTh.vue";
 import TableTd from "@/components/Table/TableTd.vue";
-import TableDropdown from "@/components/Dropdowns/TableDropdown.vue";
-import TableDropdownLink from "@/components/Dropdowns/TableDropdownLink.vue";
 import PaginatorAdmin from "@/components/Paginators/PaginatorAdmin.vue";
 import Paginator from "@/libs/Paginator";
 import { rssUpwork as api } from "@/api";
@@ -86,11 +122,7 @@ export default {
   },
   components: {
     CardBase,
-    CardHeader,
     ButtonBase,
-    TableDropdown,
-    TableDropdownLink,
-    TableTh,
     TableTd,
     PaginatorAdmin,
   },
@@ -106,11 +138,22 @@ export default {
     },
     markRead(ids, readed) {
       const data = ids.map((id) => ({ id: id, readed: readed }));
-      api.jobsMarkRead(data).then((response) => {
+      api.jobsMarkRead(data).then(() => {
         ids.forEach((id) => {
           let item = this.items.find((item) => item.id == id);
           if (item) {
             item.is_readed_by_auth_user = readed;
+          }
+        });
+      });
+    },
+    markFavourite(ids, favourited) {
+      const data = ids.map((id) => ({ id: id, favourited: favourited }));
+      api.jobsMarkFavourite(data).then(() => {
+        ids.forEach((id) => {
+          let item = this.items.find((item) => item.id == id);
+          if (item) {
+            item.is_favourited = favourited;
           }
         });
       });
