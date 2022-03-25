@@ -94,7 +94,7 @@ export default {
         request = api.update(this.id, data)
       }
       request
-        .then((response) => {
+        .then(() => {
           this.goToList();
         })
         .catch((response) => {

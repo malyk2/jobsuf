@@ -49,7 +49,6 @@
   </div>
 </template>
 <script>
-import CardHeader from "@/components/Cards/CardHeader.vue";
 import CardBase from "@/components/Cards/CardBase.vue";
 import ButtonBase from "@/components/Buttons/ButtonBase.vue";
 import TableTh from "@/components/Table/TableTh.vue";
@@ -70,7 +69,6 @@ export default {
   },
   components: {
     CardBase,
-    CardHeader,
     ButtonBase,
     TableDropdown,
     TableDropdownLink,
@@ -95,7 +93,7 @@ export default {
       });
     },
     deleteItem(item) {
-      api.delete(item.id).then((response) => {
+      api.delete(item.id).then(() => {
         const index = this.items.findIndex((i) => i.id == item.id);
         if (index > -1) {
           this.items.splice(index, 1);

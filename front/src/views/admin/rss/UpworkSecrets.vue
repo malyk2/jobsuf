@@ -41,8 +41,6 @@
   </div>
 </template>
 <script>
-import CardSettings from "@/components/Cards/CardSettings.vue";
-import CardProfile from "@/components/Cards/CardProfile.vue";
 import CardBase from "@/components/Cards/CardBase.vue";
 import InputBase from "@/components/Inputs/InputBase.vue";
 import ButtonBase from "@/components/Buttons/ButtonBase.vue";
@@ -60,8 +58,6 @@ export default {
     };
   },
   components: {
-    CardSettings,
-    CardProfile,
     CardBase,
     InputBase,
     ButtonBase,
@@ -77,7 +73,7 @@ export default {
       this.form.busy = true;
       api
         .saveSecret(this.form.data())
-        .then((response) => {
+        .then(() => {
         })
         .catch((response) => {
           this.form.onFail(response.data);

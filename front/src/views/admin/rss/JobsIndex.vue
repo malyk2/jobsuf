@@ -23,11 +23,16 @@
                   </a>
                 </table-td>
                 <table-td>
-                  {{
-                    item.rate_from
-                      ? "$" + item.rate_from + "-$" + item.rate_to
-                      : "No rate"
-                  }}
+                  <div>
+                    {{
+                      item.rate_from
+                        ? "$" + item.rate_from + "-$" + item.rate_to
+                        : "No rate"
+                    }}
+                  </div>
+                  <div>
+                    {{ item.rss }}
+                  </div>
                 </table-td>
                 <table-td> {{ item.created }} </table-td>
               </tr>
@@ -64,13 +69,9 @@
   </div>
 </template>
 <script>
-import CardHeader from "@/components/Cards/CardHeader.vue";
 import CardBase from "@/components/Cards/CardBase.vue";
 import ButtonBase from "@/components/Buttons/ButtonBase.vue";
-import TableTh from "@/components/Table/TableTh.vue";
 import TableTd from "@/components/Table/TableTd.vue";
-import TableDropdown from "@/components/Dropdowns/TableDropdown.vue";
-import TableDropdownLink from "@/components/Dropdowns/TableDropdownLink.vue";
 import PaginatorAdmin from "@/components/Paginators/PaginatorAdmin.vue";
 import Paginator from "@/libs/Paginator";
 import { rssUpwork as api } from "@/api";
@@ -86,11 +87,7 @@ export default {
   },
   components: {
     CardBase,
-    CardHeader,
     ButtonBase,
-    TableDropdown,
-    TableDropdownLink,
-    TableTh,
     TableTd,
     PaginatorAdmin,
   },
@@ -106,7 +103,7 @@ export default {
     },
     markRead(ids, readed) {
       const data = ids.map((id) => ({ id: id, readed: readed }));
-      api.jobsMarkRead(data).then((response) => {
+      api.jobsMarkRead(data).then(() => {
         ids.forEach((id) => {
           let item = this.items.find((item) => item.id == id);
           if (item) {
