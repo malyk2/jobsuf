@@ -45,8 +45,11 @@ class JobMarkRead(APIView):
         serializer.is_valid(raise_exception=True)
         me = request.user
         for item in serializer.validated_data:
-            item.get('readed') and me.readed_rss_jobs.add(
-                item.get('id')) or me.readed_rss_jobs.remove(item.get('id'))
+            id = item.get('id')
+            if item.get('readed'):
+                me.readed_rss_jobs.add(id)
+            else:
+                me.readed_rss_jobs.remove(id)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
