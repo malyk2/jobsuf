@@ -27,7 +27,9 @@
                     {{
                       item.rate_from
                         ? "Rate: $" + item.rate_from + "-$" + item.rate_to
-                        : item.budget ? "Budget: "+ item.budget : "No rate"
+                        : item.budget
+                        ? "Budget: " + item.budget
+                        : "No rate"
                     }}
                   </div>
                   <div>
@@ -56,7 +58,27 @@
                       "
                       @click="markRead([item.id], !item.is_readed_by_auth_user)"
                     >
-                      <i class="fas fa-book text-sm"></i>
+                      <i
+                        :class="
+                          item.is_readed_by_auth_user
+                            ? 'fas fa-eye-slash'
+                            : 'fas fa-eye'
+                        "
+                      ></i>
+                    </button-base>
+                  </div>
+                  <div>
+                    <button-base
+                      :color="item.is_favourited ? 'danger' : 'info'"
+                      size="mini"
+                      :title="
+                        item.is_favourited
+                          ? 'Mark as favourite'
+                          : 'Mark as unfavourite'
+                      "
+                      @click="markFavourite([item.id], !item.is_favourited)"
+                    >
+                      <i class="fas fa-heart text-sm"></i>
                     </button-base>
                   </div>
                 </table-td>
@@ -111,6 +133,17 @@ export default {
           let item = this.items.find((item) => item.id == id);
           if (item) {
             item.is_readed_by_auth_user = readed;
+          }
+        });
+      });
+    },
+    markFavourite(ids, favourited) {
+      const data = ids.map((id) => ({ id: id, favourited: favourited }));
+      api.jobsMarkFavourite(data).then(() => {
+        ids.forEach((id) => {
+          let item = this.items.find((item) => item.id == id);
+          if (item) {
+            item.is_favourited = favourited;
           }
         });
       });
