@@ -21,6 +21,38 @@
                   >
                     <i class="fas fa-link text-sm"></i>
                   </a>
+                  <div class="float-right">
+                    <button-base
+                      :color="item.is_readed_by_auth_user ? 'danger' : 'info'"
+                      size="mini"
+                      :title="
+                        item.is_readed_by_auth_user
+                          ? 'Mark as unread'
+                          : 'Mark as read'
+                      "
+                      @click="markRead([item.id], !item.is_readed_by_auth_user)"
+                    >
+                      <i
+                        :class="
+                          item.is_readed_by_auth_user
+                            ? 'fas fa-eye-slash'
+                            : 'fas fa-eye'
+                        "
+                      ></i>
+                    </button-base>
+                    <button-base
+                      :color="item.is_favourited ? 'success' : 'info'"
+                      size="mini"
+                      :title="
+                        item.is_favourited
+                          ? 'Mark as favourite'
+                          : 'Mark as unfavourite'
+                      "
+                      @click="markFavourite([item.id], !item.is_favourited)"
+                    >
+                      <i class="fas fa-heart"></i>
+                    </button-base>
+                  </div>
                 </table-td>
                 <table-td>
                   <div>
@@ -45,43 +77,7 @@
                 v-show="isShowedDetail(item.id)"
                 :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
               >
-                <table-td v-html="item.content" colspan="2"> </table-td>
-                <table-td>
-                  <div>
-                    <button-base
-                      :color="item.is_readed_by_auth_user ? 'danger' : 'info'"
-                      size="mini"
-                      :title="
-                        item.is_readed_by_auth_user
-                          ? 'Mark as unread'
-                          : 'Mark as read'
-                      "
-                      @click="markRead([item.id], !item.is_readed_by_auth_user)"
-                    >
-                      <i
-                        :class="
-                          item.is_readed_by_auth_user
-                            ? 'fas fa-eye-slash'
-                            : 'fas fa-eye'
-                        "
-                      ></i>
-                    </button-base>
-                  </div>
-                  <div>
-                    <button-base
-                      :color="item.is_favourited ? 'danger' : 'info'"
-                      size="mini"
-                      :title="
-                        item.is_favourited
-                          ? 'Mark as favourite'
-                          : 'Mark as unfavourite'
-                      "
-                      @click="markFavourite([item.id], !item.is_favourited)"
-                    >
-                      <i class="fas fa-heart text-sm"></i>
-                    </button-base>
-                  </div>
-                </table-td>
+                <table-td v-html="item.content" colspan="3"> </table-td>
               </tr>
             </template>
           </tbody>
