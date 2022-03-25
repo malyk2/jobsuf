@@ -6,16 +6,6 @@
       </template>
       <div class="block w-full overflow-x-auto">
         <table class="items-center w-full bg-transparent border-collapse">
-          <thead>
-            <!-- <tr>
-              <table-th> Rss </table-th>
-              <table-th> Title </table-th>
-              <table-th> Rate </table-th>
-              <table-th> Country </table-th>
-              <table-th> Published </table-th>
-              <table-th> Created </table-th>
-            </tr> -->
-          </thead>
           <tbody>
             <template v-for="item in items" :key="item.id">
               <tr
@@ -41,20 +31,27 @@
                 </table-td>
                 <table-td> {{ item.created }} </table-td>
               </tr>
-              <tr v-show="isShowedDetail(item.id)">
+              <tr
+                v-show="isShowedDetail(item.id)"
+                :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
+              >
                 <table-td v-html="item.content" colspan="2"> </table-td>
                 <table-td>
                   <div>
-                    <button-base color="info">
-                      <i class="fas fa-link text-sm"></i>
+                    <button-base
+                      :color="item.is_readed_by_auth_user ? 'danger' : 'info'"
+                      size="mini"
+                      :title="
+                        item.is_readed_by_auth_user
+                          ? 'Mark as unread'
+                          : 'Mark as read'
+                      "
+                      @click="markRead([item.id], !item.is_readed_by_auth_user)"
+                    >
+                      <i class="fas fa-book text-sm"></i>
                     </button-base>
                   </div>
                 </table-td>
-                <!-- <table-td>
-                  {{ item.rss }}<br />
-                  {{ item.country }}
-                </table-td>
-                <table-td> {{ item.published }} </table-td> -->
               </tr>
             </template>
           </tbody>
@@ -107,17 +104,17 @@ export default {
         this.paginator.setCount(response.count);
       });
     },
-    markAssRead(ids) {
-      // const data = ids.map((id) => ({'id': id}))
-      // api.jobsMarkAsRead(data).then((response) => {
-      //   ids.forEach(id => {
-      //     let item = this.items.find(i => {id == i.id})
-      //     if(item) {
-      //       item.is_readed_by_auth_user = true
-      //     }
-      //   });
-      // });
-      
+    markRead(ids, readed) {
+      const data = ids.map((id) => ({ id: id, readed: readed }));
+      api.jobsMarkRead(data).then((response) => {
+        ids.forEach((id) => {
+          // this.setIsReaded(id, readedd)
+          let item = this.items.find((item) => item.id == id);
+          if (item) {
+            item.is_readed_by_auth_user = readed;
+          }
+        });
+      });
     },
     toggleShowDetail(id) {
       if (this.isShowedDetail(id)) {
@@ -127,23 +124,11 @@ export default {
         }
       } else {
         this.showedIds.push(id);
-        // console.log(this.items);
-        let x = this.items.find(i => {id == i.id})
-
-        console.log('Current');
-        // console.log('Current');
-        console.log(x);
-        // console.log(item.is_readed_by_auth_user);
-        // item
-        // if(item && !item.is_readed_by_auth_user) {
-        //   this.markAssRead([id])
-        // }
       }
     },
     isShowedDetail(id) {
       return this.showedIds.includes(id);
     },
-
   },
   computed: {
     listQuery() {

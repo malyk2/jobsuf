@@ -1348,9 +1348,9 @@ select {
   background-color: rgba(234, 179, 8, var(--tw-bg-opacity));
 }
 
-.bg-amber-300 {
+.bg-amber-500 {
   --tw-bg-opacity: 1;
-  background-color: rgba(252, 211, 77, var(--tw-bg-opacity));
+  background-color: rgba(245, 158, 11, var(--tw-bg-opacity));
 }
 
 .bg-orange-200 {
@@ -1448,9 +1448,14 @@ select {
   background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
 }
 
-.active\:bg-amber-400:active {
+.active\:bg-amber-600:active {
   --tw-bg-opacity: 1;
-  background-color: rgba(251, 191, 36, var(--tw-bg-opacity));
+  background-color: rgba(217, 119, 6, var(--tw-bg-opacity));
+}
+
+.active\:bg-red-600:active {
+  --tw-bg-opacity: 1;
+  background-color: rgba(220, 38, 38, var(--tw-bg-opacity));
 }
 
 .active\:bg-blueGray-50:active {
@@ -2868,6 +2873,11 @@ select {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .py-10 {

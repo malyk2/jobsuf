@@ -67,7 +67,7 @@ const rssUpwork = {
   jobsIndex(query = {}) {
     return new Request().setParams(query).get("rss/jobs/");
   },
-  jobsMarkAsRead(data) {
+  jobsMarkRead(data) {
     return new Request(data).put("rss/jobs/read/");
   },
   

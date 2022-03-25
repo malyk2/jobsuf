@@ -43,9 +43,9 @@ class JobMarkRead(APIView):
         serializer.is_valid(raise_exception=True)
         me=request.user
         for item in serializer.validated_data:
-            me.readed_rss_jobs.add(item.get('id'))
+            item.get('readed') and me.readed_rss_jobs.add(item.get('id')) or me.readed_rss_jobs.remove(item.get('id'))
+            
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class SecretGetSave(APIView):
     permission_classes = [permissions.IsAuthenticated]

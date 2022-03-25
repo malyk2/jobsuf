@@ -68,9 +68,9 @@ class JobListSerializer(serializers.ModelSerializer):
         ]
 
     def get_is_readed_by_auth_user(self, job):
-        return bool(job.readed_auth_user) # from view's Prefetch
+        return bool(job.readed_auth_user)  # from view's Prefetch
 
 
 class JobMarkReadSerializer(serializers.Serializer):
     id = serializers.UUIDField()
-
+    readed = serializers.BooleanField()
