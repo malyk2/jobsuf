@@ -17,9 +17,19 @@ from django.forms.models import model_to_dict
 # @ensure_csrf_cookie
 @api_view(['GET', 'POST'])
 def test(request, format=None):
+    response = 'test'
+    # job = Job.objects.get(pk='fc4dd68a-fbae-4934-915b-fd728f3afc36')
+    # print(job.skills)
+    # user = User.objects.get(pk=2)
+    # user.readed_rss_jobs.set(['18791b80-b86a-4715-b325-aa1924667801'])
+
+
+    # jobs = Job.objects.filter(id__in = ['91a4d7b6-ea26-4dfc-bb01-ba4118be67cc', '18791b80-b86a-4715-b325-aa1924667801']).select_related('readed_users').all()
+    jobs = Job.objects.filter(id__in = ['91a4d7b6-ea26-4dfc-bb01-ba4118be67cc', '18791b80-b86a-4715-b325-aa1924667801']).all()
+
     
-    job = Job.objects.get(pk='fc4dd68a-fbae-4934-915b-fd728f3afc36')
-    print(job.skills)
+
+    # response = jobs
 
     # country = Country.objects.create()
     # country = Country.objects.filter(name='Test contry').last()
@@ -35,7 +45,7 @@ def test(request, format=None):
     # print(json.dumps(job))
 
     # return Response(job.created)
-    return Response('test')
+    return Response(response)
 
 @api_view(['GET', 'POST'])
 def test2(request, format=None):

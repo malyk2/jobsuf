@@ -164,7 +164,8 @@ CSRF_COOKIE_HTTPONLY=False
 #cron 
 
 CRONJOBS = [
-    ('*/5 * * * *', 'rss.cron.load_rss_upwork')
+    ('*/5 * * * *', 'rss.cron.load_rss_upwork'),
+    ('*/5 * * * *', 'test.cron.test_command_1'),
 ]
 # python manage.py crontab add
 # python manage.py crontab show

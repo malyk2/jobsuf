@@ -64,3 +64,25 @@ class JobListSerializer(serializers.ModelSerializer):
             'rss',
             'skills',
         ]
+
+class JobTestSerializer(serializers.ModelSerializer):
+    is_readed_by_auth_user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Job
+        fields = [
+            'id',
+            'is_readed_by_auth_user',
+            # 'content',
+            # 'upwork_id',
+            # 'rate_from',
+            # 'rate_to',
+            # 'published',
+            # 'created',
+            # 'country',
+            # 'rss',
+            # 'skills',
+        ]
+
+    def get_is_readed_by_auth_user(self, job):
+        return bool(job.readed_auth_user)
