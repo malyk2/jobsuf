@@ -6,20 +6,14 @@
       </template>
       <div class="block w-full overflow-x-auto">
         <table class="items-center w-full bg-transparent border-collapse">
-          <thead>
-            <!-- <tr>
-              <table-th> Rss </table-th>
-              <table-th> Title </table-th>
-              <table-th> Rate </table-th>
-              <table-th> Country </table-th>
-              <table-th> Published </table-th>
-              <table-th> Created </table-th>
-            </tr> -->
-          </thead>
           <tbody>
             <template v-for="item in items" :key="item.id">
-              <tr>
-                <table-td class="w-3/4">
+              <tr
+                :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
+                @click="toggleShowDetail(item.id)"
+              >
+                <table-td class="w-9/12">
+                  {{ item.title }}
                   <a
                     :href="item.upwork_id"
                     target="_blank"
@@ -27,9 +21,6 @@
                   >
                     <i class="fas fa-link text-sm"></i>
                   </a>
-                  <span @click="toggleShowDetail(item.id)">
-                    {{ item.title }}
-                  </span>
                 </table-td>
                 <table-td>
                   {{
@@ -40,13 +31,27 @@
                 </table-td>
                 <table-td> {{ item.created }} </table-td>
               </tr>
-              <tr v-show="isShowedDetail(item.id)">
-                <table-td v-html="item.content" colspan=3> </table-td>
-                <!-- <table-td>
-                  {{ item.rss }}<br />
-                  {{ item.country }}
+              <tr
+                v-show="isShowedDetail(item.id)"
+                :class="{ 'text-blueGray-400': item.is_readed_by_auth_user }"
+              >
+                <table-td v-html="item.content" colspan="2"> </table-td>
+                <table-td>
+                  <div>
+                    <button-base
+                      :color="item.is_readed_by_auth_user ? 'danger' : 'info'"
+                      size="mini"
+                      :title="
+                        item.is_readed_by_auth_user
+                          ? 'Mark as unread'
+                          : 'Mark as read'
+                      "
+                      @click="markRead([item.id], !item.is_readed_by_auth_user)"
+                    >
+                      <i class="fas fa-book text-sm"></i>
+                    </button-base>
+                  </div>
                 </table-td>
-                <table-td> {{ item.published }} </table-td> -->
               </tr>
             </template>
           </tbody>
@@ -94,9 +99,20 @@ export default {
   },
   methods: {
     getItems() {
-      api.indexJobs(this.listQuery).then((response) => {
+      api.jobsIndex(this.listQuery).then((response) => {
         this.items = response.results;
         this.paginator.setCount(response.count);
+      });
+    },
+    markRead(ids, readed) {
+      const data = ids.map((id) => ({ id: id, readed: readed }));
+      api.jobsMarkRead(data).then((response) => {
+        ids.forEach((id) => {
+          let item = this.items.find((item) => item.id == id);
+          if (item) {
+            item.is_readed_by_auth_user = readed;
+          }
+        });
       });
     },
     toggleShowDetail(id) {
@@ -106,7 +122,7 @@ export default {
           this.showedIds.splice(index, 1);
         }
       } else {
-        this.showedIds.push(id)
+        this.showedIds.push(id);
       }
     },
     isShowedDetail(id) {

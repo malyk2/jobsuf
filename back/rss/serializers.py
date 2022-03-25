@@ -48,6 +48,7 @@ class JobListSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='name',
     )
+    is_readed_by_auth_user = serializers.SerializerMethodField()
 
     class Meta:
         model = Job
@@ -63,4 +64,13 @@ class JobListSerializer(serializers.ModelSerializer):
             'country',
             'rss',
             'skills',
+            'is_readed_by_auth_user',
         ]
+
+    def get_is_readed_by_auth_user(self, job):
+        return bool(job.readed_auth_user)  # from view's Prefetch
+
+
+class JobMarkReadSerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+    readed = serializers.BooleanField()

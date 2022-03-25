@@ -64,8 +64,11 @@ const rssUpwork = {
   saveSecret(data) {
     return new Request(data).post("rss/secret/");
   },
-  indexJobs(query = {}) {
+  jobsIndex(query = {}) {
     return new Request().setParams(query).get("rss/jobs/");
+  },
+  jobsMarkRead(data) {
+    return new Request(data).put("rss/jobs/read/");
   },
   
 }

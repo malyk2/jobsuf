@@ -62,6 +62,7 @@ class Job(models.Model):
         'rss.Country', related_name='country', null=True, on_delete=models.SET_NULL)
     rss = models.ForeignKey(
         'rss.Upwork', related_name='rss', null=True, on_delete=models.SET_NULL)
+    readed_users = models.ManyToManyField('auth.User', related_name='readed_rss_jobs')
 
 class Skill(models.Model):
     name = models.CharField(max_length=255, blank=False)
