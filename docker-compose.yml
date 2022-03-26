@@ -1,9 +1,23 @@
 version: '2'
 services:
+  nginx:
+    # restart: always
+    # container_name: projectname_nginx
+    volumes:
+    # - ./code:/code
+      - sock:/sock
+    build:
+      context: deploy/prod
+      dockerfile: web.docker
+    depends_on:
+      - back
+    ports:
+      - "8000:8000"
   back:
     build:
       context: deploy/prod
       dockerfile: app.docker
+    # command: uwsgi --ini /var/www/uwsgi.ini
     # command: python manage.py runserver 0.0.0.0:8000 > runlog.txt
     # command: python -m debugpy --listen 0.0.0.0:3000 manage.py runserver 0.0.0.0:8000
     working_dir: /var/www
@@ -11,6 +25,8 @@ services:
     tty: true
     # volumes:
     #   - ./back:/var/www
+    volumes:
+      - sock:/sock
     # ports:
     #   - "8000:8000"
     #   - "3000:3000"
@@ -34,3 +50,7 @@ services:
   #   ports:
   #     - "80:8080"
   #     # - "3000:3000"
+
+volumes:
+    sock:
+    # pgdata:
