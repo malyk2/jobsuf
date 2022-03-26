@@ -2,7 +2,7 @@ version: '2'
 services:
   back:
     build:
-      context: deploy
+      context: deploy/local
       dockerfile: app.docker
     command: python manage.py runserver 0.0.0.0:8000 > runlog.txt
     # command: python -m debugpy --listen 0.0.0.0:3000 manage.py runserver 0.0.0.0:8000
@@ -23,7 +23,7 @@ services:
       - "54321:5432"
   front:
     build:
-      context: deploy
+      context: deploy/local
       dockerfile: front.docker
     command: npm run serve
     working_dir: /var/www
