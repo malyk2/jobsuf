@@ -1,79 +1,38 @@
 version: '2'
 services:
-  nginx:
-    # restart: always
-    # container_name: projectname_nginx
-    # volumes:
-    #   - sock:/tmp/sock
-    build:
-      context: deploy/prod
-      dockerfile: web.docker
-    depends_on:
-      - back
-      - front
-    volumes:
-      - sock:/tmp/sock
-      - static:/tmp/static
-      - front_build:/tmp/front_build
-    ports:
-      - "80:80"
   back:
     build:
-      context: deploy/prod
+      context: deploy/local
       dockerfile: app.docker
-    environment:
-      - "DEBUG=True"
-      - "SECRET_KEY=${DJANGO_SECRET_KEY}"
-      - "CSRF_COOKIE_DOMAIN=${DJANGO_CSRF_COOKIE_DOMAIN}"
-      - "DB_USER=db_user"
-      - "DB_PASSWORD=sHyd890s:su"
-      - "DB_HOST=database"
-      - "LOG_QUERY=False"
-    command: uwsgi --ini /var/www/uwsgi.ini
+    command: python manage.py runserver 0.0.0.0:8000 > runlog.txt
+    # command: python -m debugpy --listen 0.0.0.0:3000 manage.py runserver 0.0.0.0:8000
     working_dir: /var/www
-    links:
-      - database
     # stdin_open: true
     # tty: true
     volumes:
-      - sock:/tmp/sock
-      - static:/var/www/back/static
-      - ./back:/var/www/back
-      # - ./back:/var/www/back
-    # ports:
-    #   - "8000:8000"
-    #   - "3000:3000"
+      - ./back:/var/www
+    ports:
+      - "8000:8000"
+      - "3000:3000"
+    links:
+      - "database"
   database:
     image: postgres:14
     environment:
-      - "POSTGRES_USER=db_user"
-      - "POSTGRES_PASSWORD=sHyd890s:su"
+      - "POSTGRES_PASSWORD=secret"
       - "POSTGRES_DB=db"
     ports:
       - "54321:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data/
   front:
-    # build:
-    #   context: deploy/local
-    #   dockerfile: front.docker
-    image: node:lts
-    # command: npm run serve
+    build:
+      context: deploy/local
+      dockerfile: front.docker
+    command: npm run serve
     working_dir: /var/www
-    stdin_open: true
-    tty: true
+    # stdin_open: true
+    # tty: true
     volumes:
       - ./front:/var/www
-      - front_build:/var/www/dist
-    environment:
-      - "VUE_APP_API_URL=http://api.jobsuf.da"
-      - "VUE_APP_API_PORT=80"
-    # ports:
-      # - "80:8080"
+    ports:
+      - "80:8080"
       # - "3000:3000"
-
-volumes:
-    sock:
-    static:
-    pgdata:
-    front_build:
