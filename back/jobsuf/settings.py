@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from email.policy import default
 from pathlib import Path
-import environ
+import environ, os
 
 env = environ.Env()
 environ.Env.read_env()
@@ -30,7 +30,10 @@ SECRET_KEY = env('SECRET_KEY', default='some-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    'jobsuf.da',
+]
 
 
 # Application definition
@@ -137,6 +140,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static") 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

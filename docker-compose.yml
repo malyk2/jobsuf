@@ -3,36 +3,53 @@ services:
   nginx:
     # restart: always
     # container_name: projectname_nginx
-    volumes:
-      - sock:/tmp/sock
+    # volumes:
+    #   - sock:/tmp/sock
     build:
       context: deploy/prod
       dockerfile: web.docker
     depends_on:
       - back
+    volumes:
+      - sock:/tmp/sock
+      - static:/tmp/static
     ports:
       - "80:80"
   back:
     build:
       context: deploy/prod
       dockerfile: app.docker
+    environment:
+      - "DEBUG=True"
+      - "SECRET_KEY=django-insecure-no$$07gnm!u%=(naihgl^1z6x8nhslpfui@j_roplhxmz$$^vel6"
+      - "DB_USER=db_user"
+      - "DB_PASSWORD=sHyd890s:su"
+      - "DB_HOST=database"
+      - "LOG_QUERY=False"
     command: uwsgi --ini /var/www/uwsgi.ini
     working_dir: /var/www
+    links:
+      - database
     # stdin_open: true
     # tty: true
     volumes:
       - sock:/tmp/sock
+      - static:/var/www/back/static
       - ./back:/var/www/back
+      # - ./back:/var/www/back
     # ports:
     #   - "8000:8000"
     #   - "3000:3000"
-  # database:
-  #   image: postgres:14
-  #   environment:
-  #     - "POSTGRES_PASSWORD=secret"
-  #     - "POSTGRES_DB=db"
-  #   ports:
-  #     - "54321:5432"
+  database:
+    image: postgres:14
+    environment:
+      - "POSTGRES_USER=db_user"
+      - "POSTGRES_PASSWORD=sHyd890s:su"
+      - "POSTGRES_DB=db"
+    ports:
+      - "54321:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
   # front:
   #   build:
   #     context: deploy/local
@@ -43,10 +60,11 @@ services:
   #   # tty: true
   #   volumes:
   #     - ./front:/var/www
-  #   ports:
-  #     - "80:8080"
+  #   # ports:
+  #     # - "80:8080"
   #     # - "3000:3000"
 
 volumes:
     sock:
-    # pgdata:
+    static:
+    pgdata:
