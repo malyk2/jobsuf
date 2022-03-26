@@ -10,9 +10,11 @@ services:
       dockerfile: web.docker
     depends_on:
       - back
+      - front
     volumes:
       - sock:/tmp/sock
       - static:/tmp/static
+      - front_build:/tmp/front_build
     ports:
       - "80:80"
   back:
@@ -50,21 +52,27 @@ services:
       - "54321:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/
-  # front:
-  #   build:
-  #     context: deploy/local
-  #     dockerfile: front.docker
-  #   command: npm run serve
-  #   working_dir: /var/www
-  #   # stdin_open: true
-  #   # tty: true
-  #   volumes:
-  #     - ./front:/var/www
-  #   # ports:
-  #     # - "80:8080"
-  #     # - "3000:3000"
+  front:
+    # build:
+    #   context: deploy/local
+    #   dockerfile: front.docker
+    image: node:lts
+    # command: npm run serve
+    working_dir: /var/www
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./front:/var/www
+      - front_build:/var/www/dist
+    environment:
+      - "VUE_APP_API_URL=http://api.jobsuf.da"
+      - "VUE_APP_API_PORT=80"
+    # ports:
+      # - "80:8080"
+      # - "3000:3000"
 
 volumes:
     sock:
     static:
     pgdata:
+    front_build:

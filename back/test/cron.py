@@ -8,6 +8,7 @@ import environ
 
 
 def test_command_1():
+    pass
     # env = environ.Env()
     # environ.Env.read_env()
     # hosts = env('ALLOWED_HOSTS', [])

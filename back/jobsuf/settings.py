@@ -32,7 +32,7 @@ DEBUG = env('DEBUG', default=False)
 
 ALLOWED_HOSTS = [
     'localhost',
-    'jobsuf.da',
+    'api.jobsuf.da',
 ]
 
 
@@ -155,9 +155,11 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
+    "http://jobsuf.da",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
+    "http://jobsuf.da",
 ]
 # CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOW_CREDENTIALS=True
