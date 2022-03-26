@@ -25,7 +25,7 @@
                   :error="form.errors.first('user_uid')"
                 />
               </div>
-              <div class="w-full lg:w-12 px-4">
+              <div class="w-full lg:w-12/12 px-4">
                 <input-base
                   label="security Token"
                   v-model="form.security_token"
