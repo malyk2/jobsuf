@@ -23,7 +23,8 @@ services:
       dockerfile: app.docker
     environment:
       - "DEBUG=True"
-      - "SECRET_KEY=django-insecure-no$$07gnm!u%=(naihgl^1z6x8nhslpfui@j_roplhxmz$$^vel6"
+      - "SECRET_KEY=${DJANGO_SECRET_KEY}"
+      - "CSRF_COOKIE_DOMAIN=${DJANGO_CSRF_COOKIE_DOMAIN}"
       - "DB_USER=db_user"
       - "DB_PASSWORD=sHyd890s:su"
       - "DB_HOST=database"
