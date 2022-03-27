@@ -1,20 +1,22 @@
-FROM python:3.9-alpine
+FROM python:3.9
 
 RUN mkdir /var/www \
     && mkdir /var/www/back \
     && cd /var/www/back
 
-RUN apk add --no-cache git openssh uwsgi
+#RUN apk add --no-cache git openssh uwsgi
+RUN apt install git
 RUN mkdir /root/.ssh
 COPY .ssh/* /root/.ssh/
 RUN chmod 600 /root/.ssh/id_rsa
 
 ARG REPO_SSH REPO_FOLDER REPO_BRANCH
-
 COPY bash/clone_repo.sh /var/www/back
 RUN cd /var/www/back \
     && ./clone_repo.sh
 
-RUN pip install -r /var/www/back/requirements.txt
 
+RUN pip install -r /var/www/back/requirements.txt
+RUN pip install uwsgi
+#
 COPY uwsgi.ini /var/www

@@ -22,12 +22,9 @@ services:
       dockerfile: app.docker
       args:
         - REPO_SSH=${REPO_SSH}
-        - REPO_FOLDER=${REPO_FOLDER}
         - REPO_BRANCH=${REPO_BRANCH}
-        # - SOMETHING=foo
+        - REPO_FOLDER=back
     environment:
-      # - "REPO_SSH=${REPO_SSH}"
-      # - "REPO_BRANCH=${REPO_BRANCH}"
       - "DEBUG=True"
       - "SECRET_KEY=${DJANGO_SECRET_KEY}"
       - "CSRF_COOKIE_DOMAIN=${DJANGO_CSRF_COOKIE_DOMAIN}"
@@ -35,7 +32,7 @@ services:
       - "DB_PASSWORD=sHyd890s:su"
       - "DB_HOST=database"
       - "LOG_QUERY=False"
-    # command: uwsgi --ini /var/www/uwsgi.ini
+    command: uwsgi --ini /var/www/uwsgi.ini
     working_dir: /var/www
     links:
       - database
