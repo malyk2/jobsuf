@@ -44,23 +44,20 @@ services:
     #   - "3000:3000"
   database:
     container_name: jobsuf_prod_database
-    image: postgres:14
     environment:
       - "POSTGRES_USER=db_user"
       - "POSTGRES_PASSWORD=sHyd890s:su"
       - "POSTGRES_DB=db"
-    ports:
-      - "54321:5432"
+    # ports:
+    #   - "54321:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data/
+      - pgdata_prod:/var/lib/postgresql/data/
   front:
     container_name: jobsuf_prod_front
     # build:
     #   context: deploy/local
     #   dockerfile: front.docker
     image: node:lts
-    # command: npm run serve
-    working_dir: /var/www
     stdin_open: true
     tty: true
     volumes:
@@ -76,5 +73,5 @@ services:
 volumes:
     sock:
     static:
-    pgdata:
+    pgdata_prod:
     front_build:
