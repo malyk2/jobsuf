@@ -20,7 +20,14 @@ services:
     build:
       context: deploy/prod
       dockerfile: app.docker
+      args:
+        - REPO_SSH=${REPO_SSH}
+        - REPO_FOLDER=${REPO_FOLDER}
+        - REPO_BRANCH=${REPO_BRANCH}
+        # - SOMETHING=foo
     environment:
+      # - "REPO_SSH=${REPO_SSH}"
+      # - "REPO_BRANCH=${REPO_BRANCH}"
       - "DEBUG=True"
       - "SECRET_KEY=${DJANGO_SECRET_KEY}"
       - "CSRF_COOKIE_DOMAIN=${DJANGO_CSRF_COOKIE_DOMAIN}"
@@ -28,16 +35,16 @@ services:
       - "DB_PASSWORD=sHyd890s:su"
       - "DB_HOST=database"
       - "LOG_QUERY=False"
-    command: uwsgi --ini /var/www/uwsgi.ini
+    # command: uwsgi --ini /var/www/uwsgi.ini
     working_dir: /var/www
     links:
       - database
-    # stdin_open: true
-    # tty: true
+    stdin_open: true
+    tty: true
     volumes:
       - sock:/tmp/sock
       - static:/var/www/back/static
-      - ./back:/var/www/back
+      # - ./back:/var/www/back
       # - ./back:/var/www/back
     # ports:
     #   - "8000:8000"
@@ -54,9 +61,9 @@ services:
       - pgdata_prod:/var/lib/postgresql/data/
   front:
     container_name: jobsuf_prod_front
-    # build:
-    #   context: deploy/local
-    #   dockerfile: front.docker
+    build:
+      context: deploy/prod
+      dockerfile: front.docker
     stdin_open: true
     tty: true
     volumes:
