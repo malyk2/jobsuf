@@ -23,9 +23,7 @@ services:
     volumes:
       - pgdata_local:/var/lib/postgresql/data/
   front:
-    build:
-      context: deploy/local
-      dockerfile: front.docker
+    image: node:lts-alpine
     command: npm run serve
     # stdin_open: true
     # tty: true

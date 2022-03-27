@@ -4,6 +4,6 @@ services:
     links:
       - "database"
   database:
-    image: postgres:14
+    image: postgres:14-alpine
   front:
     working_dir: /var/www
