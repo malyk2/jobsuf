@@ -3,16 +3,21 @@ services:
   nginx:
     # restart: always
     container_name: jobsuf_prod_nginx
-    build:
-      context: deploy/prod
-      dockerfile: web.docker
+    image: nginx
+    # build:
+    #   context: deploy/prod
+    #   dockerfile: web.docker
     depends_on:
       - back
       - front
     volumes:
+      - ./deploy/prod/templates:/etc/nginx/templates
       - sock:/tmp/sock
       - static:/tmp/static
       - front_build:/tmp/front_build
+    environment:
+      - NGINX_FRONT_HOST=${NGINX_FRONT_HOST}
+      - NGINX_API_HOST=${NGINX_API_HOST}
     ports:
       - "80:80"
   back:
