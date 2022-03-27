@@ -2,9 +2,7 @@ version: '2'
 services:
   nginx:
     # restart: always
-    # container_name: projectname_nginx
-    # volumes:
-    #   - sock:/tmp/sock
+    container_name: jobsuf_prod_nginx
     build:
       context: deploy/prod
       dockerfile: web.docker
@@ -18,6 +16,7 @@ services:
     ports:
       - "80:80"
   back:
+    container_name: jobsuf_prod_back
     build:
       context: deploy/prod
       dockerfile: app.docker
@@ -44,6 +43,7 @@ services:
     #   - "8000:8000"
     #   - "3000:3000"
   database:
+    container_name: jobsuf_prod_database
     image: postgres:14
     environment:
       - "POSTGRES_USER=db_user"
@@ -54,6 +54,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
   front:
+    container_name: jobsuf_prod_front
     # build:
     #   context: deploy/local
     #   dockerfile: front.docker
