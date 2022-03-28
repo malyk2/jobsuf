@@ -2,6 +2,7 @@ import feedparser
 import re
 import datetime
 from urllib import parse
+from django.conf import settings
 # import re
 # from rss.models import Job
 
@@ -18,22 +19,18 @@ def get_temp_entry1():
 
 
 def load_rss_upwork():
+    print('Loading RSS Upwork...')
+    print(datetime.datetime.now())
+    print(f'Host: {settings.DATABASES}')
     rsss = get_user_rss()
     for user_rss in rsss:
         rss_url = get_rss_url(user_rss)
         entries = get_entries(rss_url)
+        print(f'Count entries: {entries.count()}')
+
         for entry in entries:
             handle_entry(user_rss, entry)
-    # print(rsss.count()
-
-    # entries = get_real_entries()
-    # for entry in entries:
-    #     handle_entry(entry)
-
-    # Job.objects.all().delete()
-    # entry = get_temp_entry1()
-
-    # handle_entry(Upwork.objects.first(), entry)
+    print(f'Count RSSs: {rsss.count()}')
 
 
 def get_user_rss():

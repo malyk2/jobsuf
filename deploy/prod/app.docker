@@ -19,5 +19,13 @@ RUN pip install -r /var/www/back/requirements.txt
 RUN pip install uwsgi
 COPY uwsgi.ini /var/www
 
-RUN cd /var/www/back \
-    python manage.py migrate 
+RUN apt update \
+    && apt install -y cron supervisor
+
+#RUN cd /var/www/back \
+#    python manage.py migrate
+    
+COPY supervisor/* /etc/supervisor/conf.d/ 
+COPY back_endpoint.sh /var/www
+
+CMD  /var/www/back_endpoint.sh

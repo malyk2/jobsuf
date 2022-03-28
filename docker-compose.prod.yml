@@ -36,12 +36,12 @@ services:
       - "SESSION_COOKIE_DOMAIN=${DJANGO_CSRF_COOKIE_DOMAIN}"
       # - "SESSION_COOKIE_SAMESITE=Lax"
       # - "CSRF_COOKIE_SAMESITE=Lax"
+      - "DB_HOST=database"
       - "DB_USER=db_user"
       - "DB_PASSWORD=sHyd890s:su"
-      - "DB_HOST=database"
       - "LOG_QUERY=False"
-    command: uwsgi --ini /var/www/uwsgi.ini
-    working_dir: /var/www
+    # command: uwsgi --ini /var/www/uwsgi.ini
+    working_dir: /var/www/back
     links:
       - database
     # stdin_open: true
@@ -49,11 +49,6 @@ services:
     volumes:
       - sock:/tmp/sock
       - static:/var/www/back/static
-      # - ./back:/var/www/back
-      # - ./back:/var/www/back
-    # ports:
-    #   - "8000:8000"
-    #   - "3000:3000"
   database:
     container_name: jobsuf_prod_database
     environment:
