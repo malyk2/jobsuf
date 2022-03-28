@@ -27,6 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY', default='some-secret-key')
 CSRF_COOKIE_DOMAIN=env('CSRF_COOKIE_DOMAIN', default='localhost')
+SESSION_COOKIE_SAMESITE=env('SESSION_COOKIE_SAMESITE')
+CSRF_COOKIE_SAMESITE=env('CSRF_COOKIE_SAMESITE')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', default=False)

@@ -33,6 +33,9 @@ services:
       - "DEBUG=True"
       - "SECRET_KEY=${DJANGO_SECRET_KEY}"
       - "CSRF_COOKIE_DOMAIN=${DJANGO_CSRF_COOKIE_DOMAIN}"
+      - "SESSION_COOKIE_DOMAIN=${DJANGO_CSRF_COOKIE_DOMAIN}"
+      - "SESSION_COOKIE_SAMESITE=Strict"
+      - "CSRF_COOKIE_SAMESITE=Strict"
       - "DB_USER=db_user"
       - "DB_PASSWORD=sHyd890s:su"
       - "DB_HOST=database"
@@ -41,8 +44,8 @@ services:
     working_dir: /var/www
     links:
       - database
-    stdin_open: true
-    tty: true
+    # stdin_open: true
+    # tty: true
     volumes:
       - sock:/tmp/sock
       - static:/var/www/back/static
