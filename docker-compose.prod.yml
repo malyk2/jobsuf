@@ -71,8 +71,8 @@ services:
       - REPO_SSH=${REPO_SSH}
       - REPO_BRANCH=${REPO_BRANCH}
       - REPO_FOLDER=front
-    # stdin_open: true
-    # tty: true
+    stdin_open: true
+    tty: true
     volumes:
       # - ./front:/var/www
       - front_build:/var/www/dist
