@@ -4,6 +4,8 @@ services:
     build:
       context: deploy/local
       dockerfile: app.docker
+    environment:
+      - "FRONT_URL=${FRONT_URL}"
     command: python manage.py runserver 0.0.0.0:8000 > runlog.txt
     # command: python -m debugpy --listen 0.0.0.0:3000 manage.py runserver 0.0.0.0:8000
     working_dir: /var/www

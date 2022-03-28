@@ -16,8 +16,8 @@ services:
       - static:/tmp/static
       - front_build:/tmp/front_build
     environment:
-      - NGINX_FRONT_HOST=${NGINX_FRONT_HOST}
-      - NGINX_API_HOST=${NGINX_API_HOST}
+      - NGINX_FRONT_HOST=${FRONT_HOST}
+      - NGINX_API_HOST=${API_HOST}
     ports:
       - "80:80"
   back:
@@ -31,6 +31,8 @@ services:
         - REPO_FOLDER=back
     environment:
       - "DEBUG=True"
+      - "API_HOST=${API_HOST}"
+      - "FRONT_URL=${FRONT_URL}"
       - "SECRET_KEY=${DJANGO_SECRET_KEY}"
       - "CSRF_COOKIE_DOMAIN=${DJANGO_CSRF_COOKIE_DOMAIN}"
       - "SESSION_COOKIE_DOMAIN=${DJANGO_CSRF_COOKIE_DOMAIN}"

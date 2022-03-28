@@ -35,8 +35,10 @@ DEBUG = env('DEBUG', default=False)
 
 ALLOWED_HOSTS = [
     'localhost',
-    'api.jobsuf.da',
 ]
+api_host = env('API_HOST', default=None)
+if api_host:
+    ALLOWED_HOSTS.append(api_host)
 
 
 # Application definition
@@ -158,12 +160,16 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
-    "http://jobsuf.da",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
-    "http://jobsuf.da",
 ]
+
+front_url = env('FRONT_URL', default=None)
+if front_url:
+    CORS_ALLOWED_ORIGINS.append(front_url)
+    CSRF_TRUSTED_ORIGINS.append(front_url)
+
 # CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOW_CREDENTIALS=True
 
