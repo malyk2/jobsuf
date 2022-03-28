@@ -1,7 +1,7 @@
 version: '2'
 services:
   nginx:
-    # restart: always
+    restart: always
     container_name: jobsuf_prod_nginx
     image: nginx
     # build:
@@ -21,6 +21,7 @@ services:
     ports:
       - "80:80"
   back:
+    restart: always
     container_name: jobsuf_prod_back
     build:
       context: deploy/prod
@@ -52,6 +53,7 @@ services:
       - sock:/tmp/sock
       - static:/var/www/back/static
   database:
+    restart: always
     container_name: jobsuf_prod_database
     environment:
       - "POSTGRES_USER=db_user"

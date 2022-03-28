@@ -180,7 +180,7 @@ CSRF_COOKIE_HTTPONLY=False
 #cron 
 
 CRONJOBS = [
-    ('* * * * *', 'rss.cron.load_rss_upwork', '>> /var/log/cron_load_rss_upwork.log'),
+    ('*/15 * * * *', 'rss.cron.load_rss_upwork', '>> /var/log/cron_load_rss_upwork.log'),
     # ('*/5 * * * *', 'rss.cron.load_rss_upwork'),
     # ('*/5 * * * *', 'test.cron.test_command_1'),
 ]
