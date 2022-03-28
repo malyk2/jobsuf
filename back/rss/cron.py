@@ -24,7 +24,7 @@ def load_rss_upwork():
     print(rsss)
     for user_rss in rsss:
         print('item')
-        print(user_rss.id)
+        # print(user_rss.id)
         rss_url = get_rss_url(user_rss)
         entries = get_entries(rss_url)
         print(f'Count entries: {entries.count()}')
