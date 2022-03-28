@@ -23,6 +23,8 @@ def load_rss_upwork():
     print('rsss:' + str(len(rsss)))
     print(rsss)
     for user_rss in rsss:
+        print('item')
+        print(user_rss.id)
         rss_url = get_rss_url(user_rss)
         entries = get_entries(rss_url)
         print(f'Count entries: {entries.count()}')
