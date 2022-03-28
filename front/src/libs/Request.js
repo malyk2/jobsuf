@@ -89,6 +89,9 @@ class Request {
   }
 
   getUrl(uri) {
+    console.log('getUrl');
+    console.log('process.env.VUE_APP_API_URL');
+    console.log(process.env.VUE_APP_API_URL);
     let url = process.env.VUE_APP_API_URL || 'http://localhost';
     const port = process.env.VUE_APP_API_PORT || false;
     url += port ? ':' + port + '/' + uri : '/' + uri

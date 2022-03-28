@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from email.policy import default
 from pathlib import Path
-import environ
+import environ, os
 
 env = environ.Env()
 environ.Env.read_env()
@@ -26,11 +26,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY', default='some-secret-key')
+CSRF_COOKIE_DOMAIN=env('CSRF_COOKIE_DOMAIN', default='localhost')
+# SESSION_COOKIE_SAMESITE=env('SESSION_COOKIE_SAMESITE', default='Lax')
+# CSRF_COOKIE_SAMESITE=env('CSRF_COOKIE_SAMESITE', default='Lax')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+]
+api_host = env('API_HOST', default=None)
+if api_host:
+    ALLOWED_HOSTS.append(api_host)
 
 
 # Application definition
@@ -92,7 +100,7 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': env('DB_HOST', default='localhost'),
+        'HOST': env('DB_HOST', default='database'),
         'NAME': 'db',
         'PASSWORD': env('DB_PASSWORD', default='secret'),
         'PORT': env('DB_PORT', default=5432),
@@ -137,6 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static") 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -155,6 +164,12 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
 ]
+
+front_url = env('FRONT_URL', default=None)
+if front_url:
+    CORS_ALLOWED_ORIGINS.append(front_url)
+    CSRF_TRUSTED_ORIGINS.append(front_url)
+
 # CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOW_CREDENTIALS=True
 
@@ -165,8 +180,9 @@ CSRF_COOKIE_HTTPONLY=False
 #cron 
 
 CRONJOBS = [
-    ('*/5 * * * *', 'rss.cron.load_rss_upwork'),
-    ('*/5 * * * *', 'test.cron.test_command_1'),
+    ('*/15 * * * *', 'rss.cron.load_rss_upwork', '>> /var/log/cron_load_rss_upwork.log'),
+    # ('*/5 * * * *', 'rss.cron.load_rss_upwork'),
+    # ('*/5 * * * *', 'test.cron.test_command_1'),
 ]
 # python manage.py crontab add
 # python manage.py crontab show

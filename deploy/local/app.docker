@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.9-alpine
 
 #RUN python -m pip install django djangorestframework
 
@@ -6,14 +6,7 @@ FROM python:3.9
 #	&& pip install -r requirements.txt
 
 ADD requirements.txt /root
-RUN cd /root && pip install -r requirements.txt
-
-#COPY ./pg /root
-
-#RUN cd /var/www \
-#	&& django-admin startproject www
-
-#WORKDIR /var/www
+RUN pip install -r /root/requirements.txt
 
 #CMD python /var/www/manage.py runserver 0.0.0.0:8000
 #CMD ["python", "/var/www/manage.py", "runserver"]
