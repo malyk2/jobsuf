@@ -79,7 +79,7 @@ services:
       - front_build:/var/www/dist
     environment:
       - "VUE_APP_API_URL=${API_URL}"
-      - "VUE_APP_API_PORT=80"
+      - "VUE_APP_API_PORT=443"
     # ports:
       # - "80:8080"
       # - "3000:3000"
