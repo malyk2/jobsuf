@@ -4,10 +4,14 @@ upstream jobsuf_docker {
 }
  
 server {
-    listen      80;
+    listen      443 ssl;
     charset     utf-8;
     client_max_body_size 75M; 
     server_name  ${NGINX_API_HOST};
+
+    ssl         on;
+    ssl_certificate /etc/nginx/certs/jobsuf.crt;
+    ssl_certificate_key /etc/nginx/certs/private.key;
    
     # your Django project's media files
     #location /media  {
