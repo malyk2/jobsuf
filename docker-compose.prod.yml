@@ -11,6 +11,7 @@ services:
       - back
       - front
     volumes:
+      - ./deploy/prod/certs:/etc/nginx/certs
       - ./deploy/prod/templates:/etc/nginx/templates
       - sock:/tmp/sock
       - static:/tmp/static
