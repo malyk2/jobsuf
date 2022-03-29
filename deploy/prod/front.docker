@@ -15,7 +15,10 @@ RUN cd /var/www \
     && ./clone_repo.sh
 
 RUN cd /var/www \
-    && npm install \
-    && npm run build
+    && npm install
+
+COPY front_endpoint.sh /var/www
+
+CMD  /var/www/front_endpoint.sh
 
 

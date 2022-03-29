@@ -27,6 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY', default='some-secret-key')
 CSRF_COOKIE_DOMAIN=env('CSRF_COOKIE_DOMAIN', default='localhost')
+# SESSION_COOKIE_DOMAIN=env('SESSION_COOKIE_DOMAIN', default='localhost')
 # SESSION_COOKIE_SAMESITE=env('SESSION_COOKIE_SAMESITE', default='Lax')
 # CSRF_COOKIE_SAMESITE=env('CSRF_COOKIE_SAMESITE', default='Lax')
 
@@ -176,6 +177,7 @@ CORS_ALLOW_CREDENTIALS=True
 CSRF_USE_SESSIONS=False
 
 CSRF_COOKIE_HTTPONLY=False
+CSRF_COOKIE_SECURE=False
 
 #cron 
 
