@@ -18,6 +18,7 @@ RUN cd /var/www \
     && npm install
 
 COPY front_endpoint.sh /var/www
+RUN chmod +x /var/www/front_endpoint.sh
 
 CMD  /var/www/front_endpoint.sh
 
