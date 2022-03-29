@@ -25,13 +25,17 @@ server {
 }
 
 server {
-    listen      443;
+    listen      443 ssl;
     charset     utf-8;
     client_max_body_size 75M; 
     server_name  ${NGINX_FRONT_HOST};
 
+    ssl         on;
     ssl_certificate /etc/nginx/certs/certificate.crt;
     ssl_certificate_key /etc/nginx/certs/private.key;
+
+    access_log   /var/log/nginx/front_jobsuf.access.log;
+    error_log    /var/log/nginx/front_jobsuf.error.log;
    
     location / {
         root     /tmp/front_build;
