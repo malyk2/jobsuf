@@ -4,10 +4,17 @@ upstream jobsuf_docker {
 }
  
 server {
-    listen      80;
+    listen      443 ssl;
     charset     utf-8;
     client_max_body_size 75M; 
     server_name  ${NGINX_API_HOST};
+
+    ssl         on;
+    ssl_certificate /etc/nginx/certs/api.jobsuf.crt;
+    ssl_certificate_key /etc/nginx/certs/api.jobsuf.key;
+
+    access_log   /var/log/nginx/back_jobsuf.access.log;
+    error_log    /var/log/nginx/back_jobsuf.error.log;
    
     # your Django project's media files
     #location /media  {
@@ -25,13 +32,17 @@ server {
 }
 
 server {
-    listen      443;
+    listen      443 ssl;
     charset     utf-8;
     client_max_body_size 75M; 
     server_name  ${NGINX_FRONT_HOST};
 
-    ssl_certificate /etc/nginx/certs/certificate.crt;
-    ssl_certificate_key /etc/nginx/certs/private.key;
+    ssl         on;
+    ssl_certificate /etc/nginx/certs/jobsuf.crt;
+    ssl_certificate_key /etc/nginx/certs/jobsuf.key;
+
+    access_log   /var/log/nginx/front_jobsuf.access.log;
+    error_log    /var/log/nginx/front_jobsuf.error.log;
    
     location / {
         root     /tmp/front_build;
