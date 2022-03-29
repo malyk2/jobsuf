@@ -10,8 +10,11 @@ server {
     server_name  ${NGINX_API_HOST};
 
     ssl         on;
-    ssl_certificate /etc/nginx/certs/api.jobsuf.crt
-    ssl_certificate_key /etc/nginx/certs/api.jobsuf.key
+    ssl_certificate /etc/nginx/certs/api.jobsuf.crt;
+    ssl_certificate_key /etc/nginx/certs/api.jobsuf.key;
+
+    access_log   /var/log/nginx/back_jobsuf.access.log;
+    error_log    /var/log/nginx/back_jobsuf.error.log;
    
     # your Django project's media files
     #location /media  {
