@@ -12,6 +12,7 @@ RUN ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts \
 ARG REPO_SSH REPO_FOLDER REPO_BRANCH
 COPY bash/clone_repo.sh /var/www/back
 RUN cd /var/www/back \
+    && chmod +x clone_repo.sh \
     && ./clone_repo.sh
 
 
