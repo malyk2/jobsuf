@@ -10,8 +10,8 @@ server {
     server_name  ${NGINX_API_HOST};
 
     ssl         on;
-    ssl_certificate /etc/nginx/certs/jobsuf.crt;
-    ssl_certificate_key /etc/nginx/certs/private.key;
+    ssl_certificate /etc/nginx/certs/api.jobsuf.crt
+    ssl_certificate_key /etc/nginx/certs/api.jobsuf.key
    
     # your Django project's media files
     #location /media  {
@@ -36,7 +36,7 @@ server {
 
     ssl         on;
     ssl_certificate /etc/nginx/certs/jobsuf.crt;
-    ssl_certificate_key /etc/nginx/certs/private.key;
+    ssl_certificate_key /etc/nginx/certs/jobsuf.key;
 
     access_log   /var/log/nginx/front_jobsuf.access.log;
     error_log    /var/log/nginx/front_jobsuf.error.log;
