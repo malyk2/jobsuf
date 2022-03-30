@@ -88,3 +88,12 @@ class JobMarkFavouriteSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     favourited = serializers.BooleanField()
     rate = serializers.IntegerField(min_value=0, max_value=5, required=False)
+
+class FilterUpworkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Upwork
+        fields = [
+            'id',
+            'type',
+            'title',
+        ]

@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, JobMarkReadSerializer, JobMarkFavouriteSerializer
+from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, JobMarkReadSerializer, JobMarkFavouriteSerializer, FilterUpworkSerializer
 from .models import Upwork, Secret, Job
 from django.core import serializers
 from django.db.models import Prefetch
@@ -93,3 +93,14 @@ class SecretGetSave(APIView):
             return request.user.rss_secret
         except Secret.DoesNotExist:
             return None
+class JobFilters(APIView):
+    
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self,request,format=None):
+        rsss = Upwork.objects.filter(user=request.user).order_by('type')
+        response = {
+            'rsss': FilterUpworkSerializer(rsss,many=True).data,
+        }
+        return Response(response)
+        
