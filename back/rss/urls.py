@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from . import views
 from .views import UpworkViewSet
 
-from django.contrib.auth import views as auth_views #import this
+from django.contrib.auth import views as auth_views  # import this
 
 # urlpatterns = [
 #     path('login', views.login),
