@@ -9,21 +9,23 @@
           <select-base
             label="RSS"
             firstOption="RSS"
-            v-model="filter.rss"
+            v-model="filter.rss_id"
             size="small"
             :options="rsss"
             optionsType="objects"
+            @change="getItems"
           />
         </div>
         <div class="w-full lg:w-3/12 px-4">
           <select-base
             label="Country"
             firstOption="Country"
-            v-model="filter.countries"
+            v-model="filter.country_id"
             size="small"
             :options="countries"
             optionsType="objects"
             optionTitleType="name"
+            @change="getItems"
           />
         </div>
       </div>
@@ -211,9 +213,18 @@ export default {
   },
   computed: {
     listQuery() {
+      let filter = {};
+      for (const key in this.filter) {
+        const element = this.filter[key];
+        console.log(element);
+        if (element !== null && element !== "") {
+          filter[key] = element;
+        }
+      }
       return {
         offset: this.paginator.offset,
         limit: this.paginator.limit,
+        filter: filter,
       };
     },
   },
