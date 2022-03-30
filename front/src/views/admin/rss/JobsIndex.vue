@@ -4,6 +4,29 @@
       <template v-slot:header>
         <h6 class="text-blueGray-700 text-xl font-bold">Jobs</h6>
       </template>
+      <div class="block w-full flex flex-wrap">
+        <div class="w-full lg:w-3/12 px-4">
+          <select-base
+            label="RSS"
+            firstOption="RSS"
+            v-model="filter.rss"
+            size="small"
+            :options="rsss"
+            optionsType="objects"
+          />
+        </div>
+        <div class="w-full lg:w-3/12 px-4">
+          <select-base
+            label="Country"
+            firstOption="Country"
+            v-model="filter.countries"
+            size="small"
+            :options="countries"
+            optionsType="objects"
+            optionTitleType="name"
+          />
+        </div>
+      </div>
       <div class="block w-full overflow-x-auto">
         <table class="items-center w-full bg-transparent border-collapse">
           <tbody>
@@ -30,7 +53,6 @@
                           isShowedDetail(item.id)
                             ? 'fa fa-arrow-circle-up'
                             : 'fa fa-arrow-circle-down'
-                            
                         "
                       ></i>
                     </button-base>
@@ -108,6 +130,7 @@ import CardBase from "@/components/Cards/CardBase.vue";
 import ButtonBase from "@/components/Buttons/ButtonBase.vue";
 import TableTd from "@/components/Table/TableTd.vue";
 import PaginatorAdmin from "@/components/Paginators/PaginatorAdmin.vue";
+import SelectBase from "@/components/Inputs/SelectBase.vue";
 import Paginator from "@/libs/Paginator";
 import { rssUpwork as api } from "@/api";
 
@@ -118,6 +141,12 @@ export default {
       items: [],
       paginator: new Paginator(15),
       showedIds: [],
+      filter: {
+        rss_id: null,
+        country_id: null,
+      },
+      rsss: [],
+      countries: [],
     };
   },
   components: {
@@ -125,15 +154,23 @@ export default {
     ButtonBase,
     TableTd,
     PaginatorAdmin,
+    SelectBase,
   },
   mounted() {
     this.getItems();
+    this.getFilterOptions();
   },
   methods: {
     getItems() {
       api.jobsIndex(this.listQuery).then((response) => {
         this.items = response.results;
         this.paginator.setCount(response.count);
+      });
+    },
+    getFilterOptions() {
+      api.jobsFilterOptions().then((response) => {
+        this.rsss = response.rsss;
+        this.countries = response.countries;
       });
     },
     markRead(ids, readed) {
