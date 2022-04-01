@@ -1,7 +1,7 @@
 <template>
   <div
     class="py-2"
-    v-if="paginator.getPages().length == 1 ? showOnePage : true"
+    v-if="paginator.getAllPages().length == 1 ? showOnePage : true"
   >
     <nav class="block">
       <ul class="flex pl-0 rounded list-none flex-wrap">
@@ -61,7 +61,7 @@
           </a>
         </li>
 
-        <li v-for="page in paginator.getPages()" :key="page">
+        <li v-for="page in paginator.getPaginatorPages(1)" :key="page">
           <a
             href="#pablo"
             class="
