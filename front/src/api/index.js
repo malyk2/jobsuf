@@ -73,6 +73,9 @@ const rssUpwork = {
   jobsMarkFavourite(data) {
     return new Request(data).put("rss/jobs/favourite/");
   },
+  jobsFilterOptions() {
+    return new Request().get("rss/jobs/filter/");
+  },
   
 }
 

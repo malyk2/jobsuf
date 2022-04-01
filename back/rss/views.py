@@ -1,11 +1,12 @@
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, JobMarkReadSerializer, JobMarkFavouriteSerializer
-from .models import Upwork, Secret, Job
+from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, JobMarkReadSerializer, JobMarkFavouriteSerializer, FilterUpworkSerializer, FilterCountrySerializer
+from .models import Upwork, Secret, Job, Country
 from django.core import serializers
 from django.db.models import Prefetch
 from django.contrib.auth.models import User
+from django_filters import rest_framework as filters
 
 
 class UpworkViewSet(viewsets.ModelViewSet):
@@ -20,10 +21,31 @@ class UpworkViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
+class JobListFilter(filters.FilterSet):
+    only_unread = filters.BooleanFilter(method='only_unread_filter')
+    only_favourited = filters.BooleanFilter(method='only_favourited_filter')
+
+    class Meta:
+        model = Job
+        fields = ['rss_id', 'country_id']
+
+    def only_unread_filter(self, queryset, name, value):
+        if value == True:
+            return queryset.exclude(readed_users__id=self.request.user.id)
+        return queryset
+
+    def only_favourited_filter(self, queryset, name, value):
+        if value == True:
+            return queryset.filter(favourited_users__id=self.request.user.id)
+        return queryset
+
+
 class JobList(generics.ListAPIView):
     queryset = Job.objects.all()
     serializer_class = JobListSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = JobListFilter
 
     def get_queryset(self):
         return Job.objects.prefetch_related(
@@ -93,3 +115,17 @@ class SecretGetSave(APIView):
             return request.user.rss_secret
         except Secret.DoesNotExist:
             return None
+
+
+class JobFilters(APIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        rsss = Upwork.objects.filter(user=request.user).order_by('type')
+        countries = Country.objects.order_by('name')
+        response = {
+            'rsss': FilterUpworkSerializer(rsss, many=True).data,
+            'countries': FilterCountrySerializer(countries, many=True).data,
+        }
+        return Response(response)

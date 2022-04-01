@@ -76,6 +76,7 @@ class JobListSerializer(serializers.ModelSerializer):
 
     def get_is_readed_by_auth_user(self, job):
         return bool(job.readed_auth_user)  # from view's Prefetch
+
     def get_is_favourited(self, job):
         return bool(job.favourited_auth_user)  # from view's Prefetch
 
@@ -84,7 +85,27 @@ class JobMarkReadSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     readed = serializers.BooleanField()
 
+
 class JobMarkFavouriteSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     favourited = serializers.BooleanField()
     rate = serializers.IntegerField(min_value=0, max_value=5, required=False)
+
+
+class FilterUpworkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Upwork
+        fields = [
+            'id',
+            'type',
+            'title',
+        ]
+
+
+class FilterCountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = [
+            'id',
+            'name',
+        ]
