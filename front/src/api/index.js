@@ -7,9 +7,9 @@ const auth = {
   logout() {
     return new Request().post("auth/logout");
   },
-  // register(data) {
-  //   return new Request(data).post("/api/admin/auth/register");
-  // },
+  register(data) {
+    return new Request(data).post("auth/register");
+  },
   getMe() {
     return new Request().get("auth/me");
   },
