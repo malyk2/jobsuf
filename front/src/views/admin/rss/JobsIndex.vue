@@ -241,8 +241,7 @@ export default {
           filter[key] = element;
         }
       }
-      console.log(filter);
-      return filter
+      return filter;
     },
   },
 };

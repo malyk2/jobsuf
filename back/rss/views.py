@@ -20,22 +20,26 @@ class UpworkViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
 class JobListFilter(filters.FilterSet):
     only_unread = filters.BooleanFilter(method='only_unread_filter')
     only_favourited = filters.BooleanFilter(method='only_favourited_filter')
+
     class Meta:
         model = Job
         fields = ['rss_id', 'country_id']
-    
+
     def only_unread_filter(self, queryset, name, value):
         if value == True:
             return queryset.exclude(readed_users__id=self.request.user.id)
         return queryset
-    
+
     def only_favourited_filter(self, queryset, name, value):
         if value == True:
             return queryset.filter(favourited_users__id=self.request.user.id)
         return queryset
+
+
 class JobList(generics.ListAPIView):
     queryset = Job.objects.all()
     serializer_class = JobListSerializer
