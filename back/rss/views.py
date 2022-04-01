@@ -6,6 +6,7 @@ from .models import Upwork, Secret, Job, Country
 from django.core import serializers
 from django.db.models import Prefetch
 from django.contrib.auth.models import User
+from django_filters import rest_framework as filters
 
 
 class UpworkViewSet(viewsets.ModelViewSet):
@@ -19,11 +20,17 @@ class UpworkViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+class JobListFilter(filters.FilterSet):
+    class Meta:
+        model = Job
+        fields = ['rss_id', 'country_id']
 
 class JobList(generics.ListAPIView):
     queryset = Job.objects.all()
     serializer_class = JobListSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = JobListFilter
 
     def get_queryset(self):
         return Job.objects.prefetch_related(

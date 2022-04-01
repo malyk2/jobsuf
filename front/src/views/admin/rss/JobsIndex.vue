@@ -28,6 +28,13 @@
             @change="getItems"
           />
         </div>
+        <div class="w-full lg:w-3/12 px-4">
+          <checkbox-base
+            label="Unread"
+            v-model="filter.only_unread"
+            @change="getItems"
+          />
+        </div>
       </div>
       <div class="block w-full overflow-x-auto">
         <table class="items-center w-full bg-transparent border-collapse">
@@ -133,6 +140,7 @@ import ButtonBase from "@/components/Buttons/ButtonBase.vue";
 import TableTd from "@/components/Table/TableTd.vue";
 import PaginatorAdmin from "@/components/Paginators/PaginatorAdmin.vue";
 import SelectBase from "@/components/Inputs/SelectBase.vue";
+import CheckboxBase from "@/components/Inputs/CheckboxBase.vue";
 import Paginator from "@/libs/Paginator";
 import { rssUpwork as api } from "@/api";
 
@@ -146,6 +154,7 @@ export default {
       filter: {
         rss_id: null,
         country_id: null,
+        only_unread: false,
       },
       rsss: [],
       countries: [],
@@ -157,6 +166,7 @@ export default {
     TableTd,
     PaginatorAdmin,
     SelectBase,
+    CheckboxBase,
   },
   mounted() {
     this.getItems();
@@ -213,19 +223,18 @@ export default {
   },
   computed: {
     listQuery() {
-      let filter = {};
+      let filter = {
+        offset: this.paginator.offset,
+        limit: this.paginator.limit,
+      };
       for (const key in this.filter) {
         const element = this.filter[key];
-        console.log(element);
         if (element !== null && element !== "") {
           filter[key] = element;
         }
       }
-      return {
-        offset: this.paginator.offset,
-        limit: this.paginator.limit,
-        filter: filter,
-      };
+      console.log(filter);
+      return filter
     },
   },
 };
