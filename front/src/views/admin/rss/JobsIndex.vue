@@ -35,6 +35,13 @@
             @change="getItems"
           />
         </div>
+        <div class="w-full lg:w-3/12 px-4">
+          <checkbox-base
+            label="Favorited"
+            v-model="filter.only_favourited"
+            @change="getItems"
+          />
+        </div>
       </div>
       <div class="block w-full overflow-x-auto">
         <table class="items-center w-full bg-transparent border-collapse">
@@ -155,6 +162,7 @@ export default {
         rss_id: null,
         country_id: null,
         only_unread: false,
+        only_favourited: false,
       },
       rsss: [],
       countries: [],
