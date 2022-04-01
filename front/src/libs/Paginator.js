@@ -6,6 +6,7 @@ class Paginator {
     this.count = 0;
     this.limit = limit;
     this.offset = offset;
+    this.pages = [];
   }
 
   setCount(count) {
@@ -23,11 +24,11 @@ class Paginator {
   }
 
   getLastPage() {
-    const pages = this.getPages();
+    const pages = this.getAllPages();
     return pages.length ? pages[pages.length - 1] : 1;
   }
 
-  getPages() {
+  getAllPages() {
     let pages = []
     let k = 1;
     for (let i = 0; i < this.count; i += this.limit) {
@@ -36,6 +37,28 @@ class Paginator {
     }
     if (pages.length * this.limit < this.count) {
       pages.push(k)
+    }
+    return pages;
+  }
+
+  getPaginatorPages(showLimit=null) {
+    let pages = []
+
+    if(showLimit) {
+      const lastPage = this.getLastPage()
+      let from = this.getCurrentPage() - showLimit;
+      if (from < 1) {
+        from = 1;
+      }
+      let to = from + showLimit * 2;
+      if (to >= lastPage) {
+        to = lastPage;
+      }
+      for (let page = from; page <= to; page++) {
+        pages.push(page);
+      }
+    } else {
+      pages = this.getAllPages()
     }
     return pages;
   }
