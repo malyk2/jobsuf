@@ -134,7 +134,7 @@
             </template>
           </tbody>
         </table>
-        <div class="mx-auto">
+        <div class="flex justify-center">
           <paginator-admin :paginator="paginator" @paginate="getItems" />
         </div>
       </div>
