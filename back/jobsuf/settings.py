@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_crontab',
+    'django_filters',
     # 'test',
     # 'auth.apps.AuthConfig',
     'rss',
