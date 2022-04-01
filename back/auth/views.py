@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .serializers import LoginSerializer, UserSerializer
+from .serializers import LoginSerializer, UserSerializer, RegisterSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -28,10 +28,19 @@ def login(request):
         authUser = loginSerializer.login(
             loginSerializer.validated_data, request)
         if authUser is None:
-            return Response('Invalid credentails', status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'message': 'Invalid credentails'}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(UserSerializer(authUser).data)
 
     return Response(loginSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def register(request):
+    registerSerializer = RegisterSerializer(data=request.data)
+    registerSerializer.is_valid(raise_exception=True)
+    newUser = registerSerializer.register(registerSerializer.validated_data, request)
+    if newUser is None:
+        return Response({'message': 'Somerthing went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(UserSerializer(newUser).data)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
