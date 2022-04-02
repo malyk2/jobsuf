@@ -144,4 +144,4 @@ def parse_published_date(date_str):
 
 
 def get_new_line_pattern(keyword):
-    return f'.*(\\n.*{keyword}<\/b>:)(.*)\\n'
+    return f'.*(<b>{keyword}<\/b>:)(.*)\\n'
