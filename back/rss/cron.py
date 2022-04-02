@@ -126,7 +126,7 @@ def get_rates(content):
     match = re.search(get_new_line_pattern('Hourly Range'), content)
     if match:
         rates_str = match.group(2).strip()
-        match_from_to = re.search('^\$(\d.\.00)-\$(\d.\.00)', rates_str)
+        match_from_to = re.search('^\$(\d*\.00)-\$(\d*\.00)', rates_str)
         if match_from_to:
             return {
                 'rate_from': match_from_to.group(1).strip(),
