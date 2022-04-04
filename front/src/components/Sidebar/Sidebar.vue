@@ -90,7 +90,7 @@
             </router-link>
           </li>
 
-          <li class="items-center">
+          <li class="items-center" v-can="['rss.view_upwork']">
             <router-link
               class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
               :to="{'name':'admin.rss.upwork.index'}"
@@ -100,7 +100,7 @@
             </router-link>
           </li>
           
-          <li class="items-center">
+          <li class="items-center" v-can="['rss.view_secret']">
             <router-link
               class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
               :to="{'name':'admin.rss.upwork.secrets'}"
