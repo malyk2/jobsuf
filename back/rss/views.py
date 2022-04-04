@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, JobMarkReadSerializer, JobMarkFavouriteSerializer, FilterUpworkSerializer, FilterCountrySerializer
 from .models import Upwork, Secret, Job, Country
+from .permissions import SecretGetSavePermission
 from django.core import serializers
 from django.db.models import Prefetch
 from django.contrib.auth.models import User
@@ -96,7 +97,7 @@ class JobMarkFavourite(APIView):
 
 
 class SecretGetSave(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, SecretGetSavePermission]
 
     def get(self, request, format=None):
         secret = self.get_secret(request)
