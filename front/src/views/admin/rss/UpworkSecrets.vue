@@ -33,7 +33,7 @@
                 />
               </div>
             </div>
-            <button-base type="submit" :disabled="form.busy">Save</button-base>
+            <button-base type="submit" :disabled="form.busy" v-can="['rss.change_secret']">Save</button-base>
           </form>
         </div>
       </card-base>
