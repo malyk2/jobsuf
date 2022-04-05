@@ -18,6 +18,7 @@ class UpworkSerializer(serializers.ModelSerializer):
             'topic',
             'q',
             'active',
+            'public',
             'user_id',
             'created',
             # 'user',

@@ -40,11 +40,18 @@
               :error="form.errors.first('q')"
             />
           </div>
-          <div class="w-full lg:w-6/12 px-4">
+          <div class="w-full lg:w-3/12 px-4">
             <checkbox-base
               label="Acive"
               v-model="form.active"
               :error="form.errors.first('active')"
+            />
+          </div>
+          <div class="w-full lg:w-3/12 px-4">
+            <checkbox-base
+              label="Public"
+              v-model="form.public"
+              :error="form.errors.first('public')"
             />
           </div>
         </div>
@@ -77,6 +84,7 @@ export default {
         topic: null,
         q: "",
         active: false,
+        public: false,
       }),
       types: ["topics", "jobs"],
       topics: ["most-recent", "best-matches"],
