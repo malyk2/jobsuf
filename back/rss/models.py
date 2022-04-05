@@ -27,6 +27,7 @@ class Upwork(models.Model):
     topic = models.CharField(choices=TOPIC_CHOICES, null=True, max_length=100)
     q = models.CharField(blank=True, max_length=100)
     active = models.BooleanField(default=False)
+    public = models.BooleanField(default=False)
     user = models.ForeignKey(
         'auth.User', related_name='rss', on_delete=models.CASCADE)
 
@@ -60,9 +61,9 @@ class Job(models.Model):
     published = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     country = models.ForeignKey(
-        'rss.Country', related_name='country', null=True, on_delete=models.SET_NULL)
+        'rss.Country', related_name='jobs', null=True, on_delete=models.SET_NULL)
     rss = models.ForeignKey(
-        'rss.Upwork', related_name='rss', null=True, on_delete=models.SET_NULL)
+        'rss.Upwork', related_name='jobs', null=True, on_delete=models.SET_NULL)
     readed_users = models.ManyToManyField(
         'auth.User', related_name='readed_rss_jobs')
     favourited_users = models.ManyToManyField(

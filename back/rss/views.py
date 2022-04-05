@@ -5,7 +5,7 @@ from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, 
 from .models import Upwork, Secret, Job, Country
 from .permissions import SecretGetSavePermission
 from django.core import serializers
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.contrib.auth.models import User
 from django_filters import rest_framework as filters
 
@@ -57,7 +57,7 @@ class JobList(generics.ListAPIView):
                 id=self.request.user.id), 'readed_auth_user'),
             Prefetch('favourited_users', User.objects.filter(
                 id=self.request.user.id), 'favourited_auth_user'),
-        ).filter(rss__user_id=self.request.user.id).order_by('-created').all()
+        ).filter((Q(rss__user_id=self.request.user.id)|Q(rss__public=True))).order_by('-created').all()
 
 
 class JobMarkRead(APIView):
@@ -123,8 +123,8 @@ class JobFilters(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
-        rsss = Upwork.objects.filter(user=request.user).order_by('type')
-        countries = Country.objects.order_by('name')
+        rsss = Upwork.objects.filter((Q(user=request.user)|Q(public=True))).order_by('type')
+        countries = Country.objects.filter().order_by('name')
         response = {
             'rsss': FilterUpworkSerializer(rsss, many=True).data,
             'countries': FilterCountrySerializer(countries, many=True).data,
