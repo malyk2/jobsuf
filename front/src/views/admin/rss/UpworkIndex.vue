@@ -17,6 +17,7 @@
               <table-th> Topic </table-th>
               <table-th> Query </table-th>
               <table-th> Active </table-th>
+              <table-th> Public </table-th>
               <table-th> Actions </table-th>
             </tr>
           </thead>
@@ -28,6 +29,7 @@
               <table-td> {{ item.topic }} </table-td>
               <table-td> {{ item.q }} </table-td>
               <table-td> {{ item.active }} </table-td>
+              <table-td> {{ item.public }} </table-td>
               <table-td>
                 <table-dropdown>
                   <table-dropdown-link @click="gotoForm(item)">
