@@ -92,18 +92,37 @@
                         "
                       ></i>
                     </button-base>
+                    <!-- <button-base
+                      :color="item.is_favourited ? 'success' : 'warning'"
+                      size="mini"
+                      :title="
+                        item.is_favourited
+                          ? 'Mark as unfavourite'
+                          : 'Mark as favourite'
+                      "
+                      @click="markFavourite([item.id], !item.is_favourited)"
+                    >
+                      <i class="fas fa-heart"></i>
+                    </button-base> -->
                     <button-base
                       :color="item.is_favourited ? 'success' : 'warning'"
                       size="mini"
                       :title="
                         item.is_favourited
-                          ? 'Mark as favourite'
-                          : 'Mark as unfavourite'
+                          ? 'Mark as unfavourite'
+                          : 'Mark as favourite'
                       "
-                      @click="markFavourite([item.id], !item.is_favourited)"
+                      @click="toogleRate(item)"
                     >
                       <i class="fas fa-heart"></i>
                     </button-base>
+                    <rates
+                      class="mt-1"
+                      v-if="item.is_favourited"
+                      :rate="item.favourited_rate"
+                      :defaultRate="0"
+                      @change="(rate) => markFavourite(item, rate, true)"
+                    />
                   </div>
                 </table-td>
                 <table-td>
@@ -149,6 +168,7 @@ import PaginatorAdmin from "@/components/Paginators/PaginatorAdmin.vue";
 import SelectBase from "@/components/Inputs/SelectBase.vue";
 import CheckboxBase from "@/components/Inputs/CheckboxBase.vue";
 import Paginator from "@/libs/Paginator";
+import Rates from "@/components/Rates/Rates.vue";
 import { rssUpwork as api } from "@/api";
 
 export default {
@@ -175,6 +195,7 @@ export default {
     PaginatorAdmin,
     SelectBase,
     CheckboxBase,
+    Rates,
   },
   mounted() {
     this.getItems();
@@ -204,7 +225,7 @@ export default {
         });
       });
     },
-    markFavourite(ids, favourited) {
+    markFavouriteOLD(ids, favourited) {
       const data = ids.map((id) => ({ id: id, favourited: favourited }));
       api.jobsMarkFavourite(data).then(() => {
         ids.forEach((id) => {
@@ -213,6 +234,20 @@ export default {
             item.is_favourited = favourited;
           }
         });
+      });
+    },
+    toogleRate(item) {
+      if(item.is_favourited) {
+          this.markFavourite(item, null, false)
+      } else {
+        item.is_favourited = true;
+      }
+    },
+    markFavourite(item, rate, favourited) {
+      const data = [{ id: item.id, rate: rate, favourited: favourited }];
+      api.jobsMarkFavourite(data).then(() => {
+        item.is_favourited = favourited;
+        item.favourited_rate = rate;
       });
     },
     toggleShowDetail(id) {
