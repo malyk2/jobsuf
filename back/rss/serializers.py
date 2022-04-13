@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from pytz import timezone
 from rest_framework import serializers
 from .models import Upwork, Secret, Job, Country
@@ -99,7 +100,7 @@ class JobMarkReadSerializer(serializers.Serializer):
 class JobMarkFavouriteSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     favourited = serializers.BooleanField()
-    rate = serializers.IntegerField(min_value=0, max_value=5, required=False)
+    rate = serializers.IntegerField(min_value=0, max_value=5, required=False, allow_null=True)
 
 
 class FilterUpworkSerializer(serializers.ModelSerializer):
