@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions, generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UpworkSerializer, SecretSerializer, JobListSerializer, JobMarkReadSerializer, JobMarkFavouriteSerializer, FilterUpworkSerializer, FilterCountrySerializer
-from .models import Upwork, Secret, Job, Country
+from .models import Upwork, Secret, Job, Country, JobFavouritedUsers
 from .permissions import SecretGetSavePermission
 from django.core import serializers
 from django.db.models import Prefetch, Q
@@ -55,8 +55,7 @@ class JobList(generics.ListAPIView):
             'skills',
             Prefetch('readed_users', User.objects.filter(
                 id=self.request.user.id), 'readed_auth_user'),
-            Prefetch('favourited_users', User.objects.filter(
-                id=self.request.user.id), 'favourited_auth_user'),
+            Prefetch('pivot_favourited_users', queryset=JobFavouritedUsers.objects.filter(user_id=self.request.user.id), to_attr='pivot_favourited_auth_data'),
         ).filter((Q(rss__user_id=self.request.user.id)|Q(rss__public=True))).order_by('-created').all()
 
 
@@ -87,9 +86,8 @@ class JobMarkFavourite(APIView):
         for item in serializer.validated_data:
             if item.get('favourited'):
                 rate = item.get('rate')
-                through_defaults = rate and {'rate': rate} or None
-                me.favourited_rss_jobs.add(
-                    item.get('id'), through_defaults=through_defaults)
+                pivot_data = rate and {'rate': rate} or None
+                JobFavouritedUsers.objects.update_or_create(user_id=me.id, job_id=item.get('id'), defaults=pivot_data)
             else:
                 me.favourited_rss_jobs.remove(item.get('id'))
 

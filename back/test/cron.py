@@ -1,4 +1,4 @@
-from rss.models import Job
+from rss.models import Job, JobFavouritedUsers
 from rss.serializers import JobMarkReadSerializer
 from django.db.models import Prefetch
 from django.contrib.auth.models import User
@@ -9,14 +9,33 @@ import environ
 
 def test_command_1():
     pass
-    # env = environ.Env()
-    # environ.Env.read_env()
-    # hosts = env('ALLOWED_HOSTS', [])
-    # print(hosts)
+    # pivot_query_set = 
+    # print(pivot_query_set[0].favourited_rss_jobs)
 
-    # pass
-    # print('test 1')
-    # jobs = Job.objects.filter(id__in = ['91a4d7b6-ea26-4dfc-bb01-ba4118be67cc', '18791b80-b86a-4715-b325-aa1924667801']).select_related('readed_users').all()
+
+    # job = Job.objects \
+    #     .prefetch_related(
+    #         Prefetch('pivot_favourited_users', queryset=JobFavouritedUsers.objects.filter(user_id=2).all(), to_attr='pivot_favourited_auth_data'),
+    #     ) \
+    #     .get(pk='92a1cd6e-ae68-4b38-a66a-9372aa043050')
+    # print(job.pivot_favourited_auth_data)
+    # job.
+
+    # user = User.objects.get(pk=2)
+    # add = user.favourited_rss_jobs.set(['92a1cd6e-ae68-4b38-a66a-9372aa043050'], through_defaults={'rate': 3})
+
+    # print(add)
+
+
+    # for pivot in job.pivot_favourited_users:
+    #     print(pivot.id)
+
+    # print(job.some_relation_set.all())
+    # job = Job.objects.prefetch_related(
+    #     Prefetch('favourited_users', User.objects.filter(id=2), 'favourited_data'),
+    #     ).get(pk='92a1cd6e-ae68-4b38-a66a-9372aa043050')
+        # R('child_model', to_attr = 'childs', qs = ChildModel.objects.only('child_attribute')
+    # print(job.favourited_data)
     # jobs = Job.objects.filter(id__in = ['91a4d7b6-ea26-4dfc-bb01-ba4118be67cc', '18791b80-b86a-4715-b325-aa1924667801']).all()
 
     # job = Job.objects.get(pk='a009512b-e0f4-4bc1-9c6a-121ebf4f21f4')

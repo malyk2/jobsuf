@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from pytz import timezone
 from rest_framework import serializers
 from .models import Upwork, Secret, Job, Country
@@ -53,6 +54,7 @@ class JobListSerializer(serializers.ModelSerializer):
     )
     is_readed_by_auth_user = serializers.SerializerMethodField()
     is_favourited = serializers.SerializerMethodField()
+    favourited_rate = serializers.SerializerMethodField()
     created = serializers.DateTimeField(
         default_timezone=timezone(settings.FRONT_TIME_ZONE))
 
@@ -73,13 +75,21 @@ class JobListSerializer(serializers.ModelSerializer):
             'skills',
             'is_readed_by_auth_user',
             'is_favourited',
+            'favourited_rate',
         ]
 
     def get_is_readed_by_auth_user(self, job):
         return bool(job.readed_auth_user)  # from view's Prefetch
 
     def get_is_favourited(self, job):
-        return bool(job.favourited_auth_user)  # from view's Prefetch
+        return bool(job.pivot_favourited_auth_data)  # from view's Prefetch
+
+    def get_favourited_rate(self, job):
+        auth_data = job.pivot_favourited_auth_data and job.pivot_favourited_auth_data[
+            0] or None
+        if auth_data:
+            return auth_data.rate
+        return None
 
 
 class JobMarkReadSerializer(serializers.Serializer):
@@ -90,7 +100,7 @@ class JobMarkReadSerializer(serializers.Serializer):
 class JobMarkFavouriteSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     favourited = serializers.BooleanField()
-    rate = serializers.IntegerField(min_value=0, max_value=5, required=False)
+    rate = serializers.IntegerField(min_value=0, max_value=5, required=False, allow_null=True)
 
 
 class FilterUpworkSerializer(serializers.ModelSerializer):
