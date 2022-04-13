@@ -77,7 +77,7 @@ class Skill(models.Model):
 
 class JobFavouritedUsers(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='pivot_favourited_users')
     created = models.DateTimeField(auto_now_add=True)
     rate = models.PositiveSmallIntegerField(default=0)
 
