@@ -13,7 +13,7 @@
             size="small"
             :options="rsss"
             optionsType="objects"
-            @change="getItems"
+            @change="runFilter"
           />
         </div>
         <div class="w-full lg:w-3/12 px-4">
@@ -25,14 +25,14 @@
             :options="countries"
             optionsType="objects"
             optionTitleType="name"
-            @change="getItems"
+            @change="runFilter"
           />
         </div>
         <div class="w-full lg:w-3/12 px-4">
           <checkbox-base
             label="Unread"
             v-model="filter.only_unread"
-            @change="getItems"
+            @change="runFilter"
           />
         </div>
         <div class="w-full lg:w-3/12 px-4 flex">
@@ -51,12 +51,19 @@
               v-model="filter.favourited_rate"
               size="small"
               :options="[1, 2, 3, 4, 5]"
-              @change="getItems"
+              @change="runFilter"
             />
           </div>
         </div>
       </div>
       <div class="block w-full overflow-x-auto">
+        <div class="flex justify-center">
+          <paginator-admin
+            :paginator="paginator"
+            @paginate="getItems"
+            :showOnePage="true"
+          />
+        </div>
         <table class="items-center w-full bg-transparent border-collapse">
           <tbody>
             <template v-for="item in items" :key="item.id">
@@ -105,18 +112,6 @@
                         "
                       ></i>
                     </button-base>
-                    <!-- <button-base
-                      :color="item.is_favourited ? 'success' : 'warning'"
-                      size="mini"
-                      :title="
-                        item.is_favourited
-                          ? 'Mark as unfavourite'
-                          : 'Mark as favourite'
-                      "
-                      @click="markFavourite([item.id], !item.is_favourited)"
-                    >
-                      <i class="fas fa-heart"></i>
-                    </button-base> -->
                     <button-base
                       :color="item.is_favourited ? 'success' : 'warning'"
                       size="mini"
@@ -167,7 +162,11 @@
           </tbody>
         </table>
         <div class="flex justify-center">
-          <paginator-admin :paginator="paginator" @paginate="getItems" />
+          <paginator-admin
+            :paginator="paginator"
+            @paginate="getItems"
+            :showOnePage="true"
+          />
         </div>
       </div>
     </card-base>
@@ -189,14 +188,18 @@ export default {
     return {
       color: "light",
       items: [],
-      paginator: new Paginator(15),
+      paginator: new Paginator(
+        this.$route.query.limit || 15,
+        this.$route.query.offset || 0
+      ),
       showedIds: [],
       filter: {
-        rss_id: null,
-        country_id: null,
-        only_unread: false,
-        only_favourited: false,
-        favourited_rate: null,
+        rss_id: this.$route.query.rss_id || null,
+        country_id: this.$route.query.country_id || null,
+        only_unread: this.$route.query.only_unread == "true" ? true : false,
+        only_favourited:
+          this.$route.query.only_favourited == "true" ? true : false,
+        favourited_rate: this.$route.query.favourited_rate || null,
       },
       rsss: [],
       countries: [],
@@ -217,7 +220,9 @@ export default {
   },
   methods: {
     getItems() {
-      api.jobsIndex(this.listQuery).then((response) => {
+      let query = this.listQuery;
+      api.jobsIndex(query).then((response) => {
+        this.$router.replace({ query: query });
         this.items = response.results;
         this.paginator.setCount(response.count);
       });
@@ -266,6 +271,10 @@ export default {
     isShowedDetail(id) {
       return this.showedIds.includes(id);
     },
+    runFilter() {
+      this.paginator.setPage(1);
+      this.getItems();
+    },
     filterFavourited() {
       if (!this.filter.only_favourited) {
         this.filter.favourited_rate = null;
@@ -275,17 +284,17 @@ export default {
   },
   computed: {
     listQuery() {
-      let filter = {
+      let query = {
         offset: this.paginator.offset,
         limit: this.paginator.limit,
       };
       for (const key in this.filter) {
         const element = this.filter[key];
         if (element !== null && element !== "") {
-          filter[key] = element;
+          query[key] = element;
         }
       }
-      return filter;
+      return query;
     },
   },
 };
