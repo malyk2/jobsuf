@@ -25,6 +25,7 @@ class UpworkViewSet(viewsets.ModelViewSet):
 class JobListFilter(filters.FilterSet):
     only_unread = filters.BooleanFilter(method='only_unread_filter')
     only_favourited = filters.BooleanFilter(method='only_favourited_filter')
+    favourited_rate = filters.NumberFilter(method='favourited_rate_filter')
 
     class Meta:
         model = Job
@@ -38,6 +39,11 @@ class JobListFilter(filters.FilterSet):
     def only_favourited_filter(self, queryset, name, value):
         if value == True:
             return queryset.filter(favourited_users__id=self.request.user.id)
+        return queryset
+    
+    def favourited_rate_filter(self, queryset, name, value):
+        if value != None:
+            return queryset.filter(pivot_favourited_users__rate=value)
         return queryset
 
 
