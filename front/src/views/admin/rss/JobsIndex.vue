@@ -35,12 +35,25 @@
             @change="getItems"
           />
         </div>
-        <div class="w-full lg:w-3/12 px-4">
-          <checkbox-base
-            label="Favorited"
-            v-model="filter.only_favourited"
-            @change="getItems"
-          />
+        <div class="w-full lg:w-3/12 px-4 flex">
+          <div class="w-1/3">
+            <checkbox-base
+              label="Favorited"
+              v-model="filter.only_favourited"
+              @change="filterFavourited"
+            />
+          </div>
+          <div class="w-2/3">
+            <select-base
+              v-show="filter.only_favourited"
+              label="Rate"
+              firstOption="Rate"
+              v-model="filter.favourited_rate"
+              size="small"
+              :options="[1, 2, 3, 4, 5]"
+              @change="getItems"
+            />
+          </div>
         </div>
       </div>
       <div class="block w-full overflow-x-auto">
@@ -183,6 +196,7 @@ export default {
         country_id: null,
         only_unread: false,
         only_favourited: false,
+        favourited_rate: null,
       },
       rsss: [],
       countries: [],
@@ -225,20 +239,9 @@ export default {
         });
       });
     },
-    markFavouriteOLD(ids, favourited) {
-      const data = ids.map((id) => ({ id: id, favourited: favourited }));
-      api.jobsMarkFavourite(data).then(() => {
-        ids.forEach((id) => {
-          let item = this.items.find((item) => item.id == id);
-          if (item) {
-            item.is_favourited = favourited;
-          }
-        });
-      });
-    },
     toogleRate(item) {
-      if(item.is_favourited) {
-          this.markFavourite(item, null, false)
+      if (item.is_favourited) {
+        this.markFavourite(item, null, false);
       } else {
         item.is_favourited = true;
       }
@@ -262,6 +265,12 @@ export default {
     },
     isShowedDetail(id) {
       return this.showedIds.includes(id);
+    },
+    filterFavourited() {
+      if (!this.filter.only_favourited) {
+        this.filter.favourited_rate = null;
+      }
+      this.getItems();
     },
   },
   computed: {
