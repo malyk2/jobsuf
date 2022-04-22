@@ -85,7 +85,7 @@ export default {
     getItems() {
       api.index(this.listQuery).then((response) => {
         this.items = response.results;
-        this.paginator.setCount(response.count);
+        this.paginator.createPaginator(response.count);
       });
     },
     gotoForm(item) {
