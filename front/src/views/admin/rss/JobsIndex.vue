@@ -224,7 +224,7 @@ export default {
       api.jobsIndex(query).then((response) => {
         this.$router.replace({ query: query });
         this.items = response.results;
-        this.paginator.setCount(response.count);
+        this.paginator.createPaginator(response.count);
       });
     },
     getFilterOptions() {
@@ -276,6 +276,7 @@ export default {
       this.getItems();
     },
     filterFavourited() {
+      this.paginator.setPage(1);
       if (!this.filter.only_favourited) {
         this.filter.favourited_rate = null;
       }

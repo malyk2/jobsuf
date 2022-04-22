@@ -9,8 +9,25 @@ class Paginator {
     this.pages = [];
   }
 
-  setCount(count) {
+  createPaginator(count) {
     this.count = count
+    this.fillPages();
+    return this
+  }
+
+  fillPages() {
+    const limit = this.limit * 1
+    let pages = []
+    let k = 1;
+    
+    for (let i = 0; i < this.count; i += limit) {
+      pages.push(k)
+      k++;
+    }
+    if (pages.length * limit < this.count) {
+      pages.push(k)
+    }
+    this.pages = pages;
     return this
   }
 
@@ -29,16 +46,7 @@ class Paginator {
   }
 
   getAllPages() {
-    let pages = []
-    let k = 1;
-    for (let i = 0; i < this.count; i += this.limit) {
-      pages.push(k)
-      k++;
-    }
-    if (pages.length * this.limit < this.count) {
-      pages.push(k)
-    }
-    return pages;
+    return this.pages;
   }
 
   getPaginatorPages(showLimit=null) {
