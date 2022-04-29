@@ -40,7 +40,8 @@ def get_rss_url(user_rss):
     }
 
     if user_rss.type == 'topics':
-        params['topic'] = user_rss.topic
+        if user_rss.topic != None:
+            params['topic'] = user_rss.topic
     elif user_rss.type == 'jobs':
         params['api_params'] = 1
         params['sort'] = 'recency'
