@@ -1,14 +1,19 @@
-from rss.models import Job, JobFavouritedUsers
+from rss.models import Job, JobFavouritedUsers, Upwork
 from rss.serializers import JobMarkReadSerializer
 from django.db.models import Prefetch
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.db.models.sql.datastructures import Join
 import environ
-
+from rss.cron import get_rss_url
 
 def test_command_1():
     pass
+    # us = Upwork.objects.get(pk=5)
+    # print(us.id)
+    # test = get_rss_url(us)
+    # print(test)
+
     # pivot_query_set = 
     # print(pivot_query_set[0].favourited_rss_jobs)
 
