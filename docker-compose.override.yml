@@ -6,7 +6,9 @@ services:
       dockerfile: app.docker
     environment:
       - "FRONT_URL=${FRONT_URL}"
-    command: python manage.py runserver 0.0.0.0:8000 > runlog.txt
+      - "DB_USER=postgres"
+      - "DEBUG=True"
+    command: python manage.py runserver 0.0.0.0:8000
     # command: python -m debugpy --listen 0.0.0.0:3000 manage.py runserver 0.0.0.0:8000
     working_dir: /var/www
     # stdin_open: true
@@ -26,6 +28,9 @@ services:
       - pgdata_local:/var/lib/postgresql/data/
   front:
     image: node:lts-alpine
+    environment:
+      - "VUE_APP_API_URL=http://localhost"
+      - "VUE_APP_API_PORT=8000"
     command: npm run serve
     # stdin_open: true
     # tty: true
