@@ -6,10 +6,27 @@ from django.db.models import Count
 from django.db.models.sql.datastructures import Join
 import environ
 from rss.cron import get_rss_url
+from django.db import connection
+
 
 def test_command_1():
     pass
+    # test = U
     # us = Upwork.objects.get(pk=5)
+    # query = """ALTER TABLE public.rss_job
+    #     DROP COLUMN search_vector;
+    #     ALTER TABLE public.rss_job 
+    #         ADD COLUMN search_vector tsvector 
+    #             GENERATED ALWAYS AS (to_tsvector('english', coalesce(title, '') || ' ' || coalesce("content", ''))) STORED;"""
+    # with connection.cursor() as cursor:
+    #     cursor.execute(query)
+        # cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
+        # row = cursor.fetchone()
+
+    # return row
+    # test = Job.objects.filter(search_vector="analytical job").count()
+    # print(test)
+    # print(jobs)
     # print(us.id)
     # test = get_rss_url(us)
     # print(test)

@@ -23,6 +23,13 @@ class UpworkViewSet(viewsets.ModelViewSet):
 
 
 class JobListFilter(filters.FilterSet):
+    budget__gte = filters.NumberFilter(field_name='budget', lookup_expr='gte')
+    budget__lte = filters.NumberFilter(field_name='budget', lookup_expr='lte')
+    rate_from__gte = filters.NumberFilter(field_name='rate_from', lookup_expr='gte')
+    rate_from__lte = filters.NumberFilter(field_name='rate_from', lookup_expr='lte')
+    rate_to__gte = filters.NumberFilter(field_name='rate_to', lookup_expr='gte')
+    rate_to__lte = filters.NumberFilter(field_name='rate_to', lookup_expr='lte')
+    search = filters.CharFilter(field_name='search_vector')
     only_unread = filters.BooleanFilter(method='only_unread_filter')
     only_favourited = filters.BooleanFilter(method='only_favourited_filter')
     favourited_rate = filters.NumberFilter(method='favourited_rate_filter')
