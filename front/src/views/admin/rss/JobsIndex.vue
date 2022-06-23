@@ -56,11 +56,27 @@
           </div>
         </div>
         <div class="lg:w-2/12 flex items-center justify-center">
-          <a href="javascript:;" class="text-emerald-500" role="button" @click="showAdwansedFilter = !showAdwansedFilter"
-            >Advanced</a
-          >
+          <div class="w-1/2">
+            <button-base
+              color="danger"
+              size="small"
+              title="Reset"
+              @click="resetFilter()"
+            >
+              Reset
+            </button-base>
+          </div>
+          <div class="w-1/2">
+            <a
+              href="javascript:;"
+              class="text-emerald-500"
+              role="button"
+              @click="showAdwansedFilter = !showAdwansedFilter"
+              >Advanced</a
+            >
+          </div>
         </div>
-        <template v-if="showAdwansedFilter" >
+        <template v-if="showAdwansedFilter">
           <div class="flex w-full">
             <div class="w-full lg:w-2/12 px-4">
               <select-base
@@ -91,14 +107,9 @@
                 v-model="priceFilter.value"
               />
             </div>
-            <div class="w-full lg:w-1/12 px-4">
-            </div>
+            <div class="w-full lg:w-1/12 px-4"></div>
             <div class="w-full lg:w-2/12 px-4">
-              <input-base
-                label="Value"
-                size="small"
-                v-model="filter.search"
-              />
+              <input-base label="Search" size="small" v-model="filter.search" />
             </div>
             <div class="w-full lg:w-1/12 px-4 flex items-center justify-center">
               <button-base
@@ -111,10 +122,6 @@
               </button-base>
             </div>
           </div>
-          <!-- <div class="w-full">
-            <div class="flex justify-center">
-            </div>
-          </div> -->
         </template>
       </div>
       <div class="block w-full overflow-x-auto">
@@ -262,7 +269,7 @@ export default {
         only_favourited:
           this.$route.query.only_favourited == "true" ? true : false,
         favourited_rate: this.$route.query.favourited_rate || null,
-        search: "",
+        search: this.$route.query.search || null,
       },
       showAdwansedFilter: false,
       priceFilter: {
@@ -344,6 +351,18 @@ export default {
     runFilter() {
       this.paginator.setPage(1);
       this.getItems();
+    },
+    resetFilter() {
+      this.paginator.setPage(1);
+      for (const key in this.filter) {
+        const element = this.filter[key];
+        if (typeof element == 'boolean') {
+          this.filter[key] = false
+        } else {
+          this.filter[key] = null
+        }
+      }
+      this.getItems()
     },
     filterFavourited() {
       this.paginator.setPage(1);
