@@ -71,6 +71,19 @@ class Job(models.Model):
         'auth.User', related_name='favourited_rss_jobs', through='JobFavouritedUsers')
     search_vector = SearchVectorField(null=True)
 
+    #Disable set search vector by Django
+    def _do_insert(self, manager, using, fields, update_pk, raw):
+        fields = [
+            f for f in fields if f.attname not in ['search_vector']
+        ]
+        return super()._do_insert(manager, using, fields, update_pk, raw)
+
+    def _do_update(self, base_qs, using, pk_val, values, update_fields, forced_update):
+        values = [
+            value for value in values if value[0].attname not in ['search_vector']
+        ]
+        return super()._do_update(base_qs, using, pk_val, values, update_fields, forced_update)
+
 
 class Skill(models.Model):
     name = models.CharField(max_length=255, blank=False)
