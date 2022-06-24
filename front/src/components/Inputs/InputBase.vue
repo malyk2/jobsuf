@@ -11,8 +11,6 @@
       :type="type"
       class="
         border-0
-        px-3
-        py-3
         placeholder-blueGray-300
         text-blueGray-600
         bg-white
@@ -26,6 +24,7 @@
         transition-all
         duration-150
       "
+      :class="[sizeClasses]"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
     />
@@ -50,7 +49,14 @@ export default {
       type: String,
       validator: function (value) {
         // The value must match one of these strings
-        return ["text", "password"].indexOf(value) !== -1;
+        return ["text", "password",].indexOf(value) !== -1;
+      },
+    },
+    size: {
+      default: "regular",
+      type: String,
+      validator: function (value) {
+        return ["regular", "small", "mini"].indexOf(value) !== -1;
       },
     },
     error: {
@@ -63,5 +69,19 @@ export default {
     },
 
   },
+  computed: {
+    sizeClasses() {
+      switch (this.size) {
+        case "regular":
+          return ["px-3", "py-3"];
+        case "small":
+          return ["px-2", "py-2"];
+        case "mini":
+          return ["px-1", "py-1"];
+        default:
+          return [];
+      }
+    },
+  }
 };
 </script>

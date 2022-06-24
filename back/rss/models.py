@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.functions import RandomUUID
+from django.contrib.postgres.search import SearchVectorField  
 import uuid
 # Create your models here.
 
@@ -68,6 +69,7 @@ class Job(models.Model):
         'auth.User', related_name='readed_rss_jobs')
     favourited_users = models.ManyToManyField(
         'auth.User', related_name='favourited_rss_jobs', through='JobFavouritedUsers')
+    search_vector = SearchVectorField(null=True)
 
 
 class Skill(models.Model):

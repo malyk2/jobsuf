@@ -4,7 +4,7 @@
       <template v-slot:header>
         <h6 class="text-blueGray-700 text-xl font-bold">Jobs</h6>
       </template>
-      <div class="block w-full flex flex-wrap">
+      <div class="w-full flex flex-wrap">
         <div class="w-full lg:w-3/12 px-4">
           <select-base
             label="RSS"
@@ -28,7 +28,7 @@
             @change="runFilter"
           />
         </div>
-        <div class="w-full lg:w-3/12 px-4">
+        <div class="w-full lg:w-1/12 px-4">
           <checkbox-base
             label="Unread"
             v-model="filter.only_unread"
@@ -55,6 +55,74 @@
             />
           </div>
         </div>
+        <div class="lg:w-2/12 flex items-center justify-center">
+          <div class="w-1/2">
+            <button-base
+              color="danger"
+              size="small"
+              title="Reset"
+              @click="resetFilter()"
+            >
+              Reset
+            </button-base>
+          </div>
+          <div class="w-1/2">
+            <a
+              href="javascript:;"
+              class="text-emerald-500"
+              role="button"
+              @click="showAdwansedFilter = !showAdwansedFilter"
+              >Advanced</a
+            >
+          </div>
+        </div>
+        <template v-if="showAdwansedFilter">
+          <div class="flex w-full">
+            <div class="w-full lg:w-2/12 px-4">
+              <select-base
+                label="Price"
+                size="small"
+                v-model="priceFilter.type"
+                optionsType="objects"
+                optionValueType="value"
+                :options="[
+                  { title: 'Fixed', value: 'budget' },
+                  { title: 'Hourly from', value: 'rate_from' },
+                  { title: 'Hourly to', value: 'rate_to' },
+                ]"
+              />
+            </div>
+            <div class="w-full lg:w-1/12 px-4">
+              <select-base
+                label="Operator"
+                size="small"
+                v-model="priceFilter.operator"
+                :options="['>=', '<=']"
+              />
+            </div>
+            <div class="w-full lg:w-1/12 px-4">
+              <input-base
+                label="Value"
+                size="small"
+                v-model="priceFilter.value"
+              />
+            </div>
+            <div class="w-full lg:w-1/12 px-4"></div>
+            <div class="w-full lg:w-2/12 px-4">
+              <input-base label="Search" size="small" v-model="filter.search" />
+            </div>
+            <div class="w-full lg:w-1/12 px-4 flex items-center justify-center">
+              <button-base
+                color="success"
+                size="small"
+                title="Filter"
+                @click="runFilter()"
+              >
+                Run
+              </button-base>
+            </div>
+          </div>
+        </template>
       </div>
       <div class="block w-full overflow-x-auto">
         <div class="flex justify-center">
@@ -178,6 +246,7 @@ import ButtonBase from "@/components/Buttons/ButtonBase.vue";
 import TableTd from "@/components/Table/TableTd.vue";
 import PaginatorAdmin from "@/components/Paginators/PaginatorAdmin.vue";
 import SelectBase from "@/components/Inputs/SelectBase.vue";
+import InputBase from "@/components/Inputs/InputBase.vue";
 import CheckboxBase from "@/components/Inputs/CheckboxBase.vue";
 import Paginator from "@/libs/Paginator";
 import Rates from "@/components/Rates/Rates.vue";
@@ -200,6 +269,13 @@ export default {
         only_favourited:
           this.$route.query.only_favourited == "true" ? true : false,
         favourited_rate: this.$route.query.favourited_rate || null,
+        search: this.$route.query.search || null,
+      },
+      showAdwansedFilter: false,
+      priceFilter: {
+        type: "rate_from",
+        operator: ">=",
+        value: null,
       },
       rsss: [],
       countries: [],
@@ -212,6 +288,7 @@ export default {
     PaginatorAdmin,
     SelectBase,
     CheckboxBase,
+    InputBase,
     Rates,
   },
   mounted() {
@@ -275,6 +352,18 @@ export default {
       this.paginator.setPage(1);
       this.getItems();
     },
+    resetFilter() {
+      this.paginator.setPage(1);
+      for (const key in this.filter) {
+        const element = this.filter[key];
+        if (typeof element == 'boolean') {
+          this.filter[key] = false
+        } else {
+          this.filter[key] = null
+        }
+      }
+      this.getItems()
+    },
     filterFavourited() {
       this.paginator.setPage(1);
       if (!this.filter.only_favourited) {
@@ -294,6 +383,10 @@ export default {
         if (element !== null && element !== "") {
           query[key] = element;
         }
+      }
+      if (this.priceFilter.value) {
+        const sufix = this.priceFilter.operator === ">=" ? "gte" : "lte";
+        query[this.priceFilter.type + "__" + sufix] = this.priceFilter.value;
       }
       return query;
     },
