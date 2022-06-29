@@ -49,7 +49,7 @@ export default {
       type: String,
       validator: function (value) {
         // The value must match one of these strings
-        return ["text", "password",].indexOf(value) !== -1;
+        return ["text", "password","date"].indexOf(value) !== -1;
       },
     },
     size: {

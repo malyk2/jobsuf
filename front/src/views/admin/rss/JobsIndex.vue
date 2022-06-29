@@ -114,6 +114,43 @@
               />
             </div>
           </div>
+          <div class="flex w-full lg:w-4/12 rounded-md border border-gray-100">
+            <div class="w-full lg:w-1/4 px-4">
+              <select-base
+                label="Date"
+                size="small"
+                v-model="dateFilter.field"
+                optionsType="objects"
+                optionValueType="value"
+                :options="[
+                  { title: 'Created', value: 'created' },
+                  { title: 'Published', value: 'published' },
+                ]"
+              />
+            </div>
+            <div class="w-full lg:w-1/4 px-4">
+              <select-base
+                label="Operator"
+                size="small"
+                v-model="dateFilter.operator"
+                optionsType="objects"
+                optionValueType="value"
+                :options="[
+                  { title: '>=', value: 'gte' },
+                  { title: '<=', value: 'lte' },
+                  { title: '=', value: '' },
+                ]"
+              />
+            </div>
+            <div class="w-full lg:w-2/4 px-4">
+              <input-base
+                label="Value"
+                size="small"
+                v-model="dateFilter.value"
+                type="date"
+              />
+            </div>
+          </div>
           <div class="w-full lg:w-1/12 px-4"></div>
           <div class="w-full lg:w-2/12 px-4">
             <input-base label="Search" size="small" v-model="filter.search" />
@@ -283,6 +320,12 @@ export default {
         operator: "gte",
         value: null,
       },
+      dateFilter: {
+        field: "created",
+        operator: "gte",
+        value:  new Date().toISOString().split('T')[0],
+        // value:  '',
+      },
       rsss: [],
       countries: [],
     };
@@ -396,6 +439,11 @@ export default {
       } else if (this.priceFilter.value) {
         query[this.priceFilter.type + "__" + this.priceFilter.operator] = this.priceFilter.value;
       }
+      if (this.dateFilter.value !== '') {
+        const sufix = this.dateFilter.operator !== '' ? ('__' + this.dateFilter.operator) : ''
+        query[this.dateFilter.field + sufix] = this.dateFilter.value;
+      }
+      console.log(query);
       return query;
     },
   },
