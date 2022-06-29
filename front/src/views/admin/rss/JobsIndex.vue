@@ -67,13 +67,20 @@
             </button-base>
           </div>
           <div class="w-1/2">
-            <a
-              href="javascript:;"
-              class="text-emerald-500"
-              role="button"
+            <button-base
+              color="info"
+              size="small"
+              title="Advanced"
               @click="showAdwansedFilter = !showAdwansedFilter"
-              >Advanced</a
             >
+              <i
+                :class="
+                  showAdwansedFilter
+                    ? 'fa fa-arrow-circle-up'
+                    : 'fa fa-arrow-circle-down'
+                "
+              ></i>
+            </button-base>
           </div>
         </div>
         <template v-if="showAdwansedFilter">
@@ -93,7 +100,10 @@
                 ]"
               />
             </div>
-            <div class="w-full lg:w-1/4 px-4" v-if="this.priceFilter.type !== 'no_rate'">
+            <div
+              class="w-full lg:w-1/4 px-4"
+              v-if="this.priceFilter.type !== 'no_rate'"
+            >
               <select-base
                 label="Operator"
                 size="small"
@@ -106,7 +116,10 @@
                 ]"
               />
             </div>
-            <div class="w-full lg:w-1/4 px-4" v-if="this.priceFilter.type !== 'no_rate'">
+            <div
+              class="w-full lg:w-1/4 px-4"
+              v-if="this.priceFilter.type !== 'no_rate'"
+            >
               <input-base
                 label="Value"
                 size="small"
@@ -323,8 +336,8 @@ export default {
       dateFilter: {
         field: "created",
         operator: "gte",
-        value:  new Date().toISOString().split('T')[0],
-        // value:  '',
+        // value:  new Date().toISOString().split('T')[0],
+        value: "",
       },
       rsss: [],
       countries: [],
@@ -407,10 +420,11 @@ export default {
         const element = this.filter[key];
         if (typeof element == "boolean") {
           this.filter[key] = false;
-        } else if(typeof element == "string") {
+        } else if (typeof element == "string") {
           this.filter[key] = null;
         }
         this.priceFilter.value = "";
+        this.dateFilter.value = "";
       }
       this.getItems();
     },
@@ -434,16 +448,19 @@ export default {
           query[key] = element;
         }
       }
-      if(this.priceFilter.type == 'no_rate') {
-        query['no_rate'] = true;
+      if (this.priceFilter.type == "no_rate") {
+        query["no_rate"] = true;
       } else if (this.priceFilter.value) {
-        query[this.priceFilter.type + "__" + this.priceFilter.operator] = this.priceFilter.value;
+        query[this.priceFilter.type + "__" + this.priceFilter.operator] =
+          this.priceFilter.value;
       }
-      if (this.dateFilter.value !== '') {
-        const sufix = this.dateFilter.operator !== '' ? ('__' + this.dateFilter.operator) : ''
+      if (this.dateFilter.value !== "") {
+        const sufix =
+          this.dateFilter.operator !== ""
+            ? "__" + this.dateFilter.operator
+            : "";
         query[this.dateFilter.field + sufix] = this.dateFilter.value;
       }
-      console.log(query);
       return query;
     },
   },
