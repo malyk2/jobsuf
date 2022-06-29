@@ -55,7 +55,7 @@
             />
           </div>
         </div>
-        <div class="lg:w-2/12 flex items-center justify-center">
+        <div class="w-full lg:w-2/12 p-4 flex items-center justify-center">
           <div class="w-1/2">
             <button-base
               color="danger"
@@ -67,18 +67,25 @@
             </button-base>
           </div>
           <div class="w-1/2">
-            <a
-              href="javascript:;"
-              class="text-emerald-500"
-              role="button"
+            <button-base
+              color="info"
+              size="small"
+              title="Advanced"
               @click="showAdwansedFilter = !showAdwansedFilter"
-              >Advanced</a
             >
+              <i
+                :class="
+                  showAdwansedFilter
+                    ? 'fa fa-arrow-circle-up'
+                    : 'fa fa-arrow-circle-down'
+                "
+              ></i>
+            </button-base>
           </div>
         </div>
         <template v-if="showAdwansedFilter">
-          <div class="flex w-full">
-            <div class="w-full lg:w-2/12 px-4">
+          <div class="flex w-full lg:w-4/12 rounded-md border border-gray-100">
+            <div class="w-full lg:w-2/4 px-4">
               <select-base
                 label="Price"
                 size="small"
@@ -86,41 +93,90 @@
                 optionsType="objects"
                 optionValueType="value"
                 :options="[
-                  { title: 'Fixed', value: 'budget' },
+                  { title: 'Budget', value: 'budget' },
                   { title: 'Hourly from', value: 'rate_from' },
                   { title: 'Hourly to', value: 'rate_to' },
+                  { title: 'No rate', value: 'no_rate' },
                 ]"
               />
             </div>
-            <div class="w-full lg:w-1/12 px-4">
+            <div
+              class="w-full lg:w-1/4 px-4"
+              v-if="this.priceFilter.type !== 'no_rate'"
+            >
               <select-base
                 label="Operator"
                 size="small"
                 v-model="priceFilter.operator"
-                :options="['>=', '<=']"
+                optionsType="objects"
+                optionValueType="value"
+                :options="[
+                  { title: '>=', value: 'gte' },
+                  { title: '<=', value: 'lte' },
+                ]"
               />
             </div>
-            <div class="w-full lg:w-1/12 px-4">
+            <div
+              class="w-full lg:w-1/4 px-4"
+              v-if="this.priceFilter.type !== 'no_rate'"
+            >
               <input-base
                 label="Value"
                 size="small"
                 v-model="priceFilter.value"
               />
             </div>
-            <div class="w-full lg:w-1/12 px-4"></div>
-            <div class="w-full lg:w-2/12 px-4">
-              <input-base label="Search" size="small" v-model="filter.search" />
-            </div>
-            <div class="w-full lg:w-1/12 px-4 flex items-center justify-center">
-              <button-base
-                color="success"
+          </div>
+          <div class="flex w-full lg:w-4/12 rounded-md border border-gray-100">
+            <div class="w-full lg:w-1/4 px-4">
+              <select-base
+                label="Date"
                 size="small"
-                title="Filter"
-                @click="runFilter()"
-              >
-                Run
-              </button-base>
+                v-model="dateFilter.field"
+                optionsType="objects"
+                optionValueType="value"
+                :options="[
+                  { title: 'Created', value: 'created' },
+                  { title: 'Published', value: 'published' },
+                ]"
+              />
             </div>
+            <div class="w-full lg:w-1/4 px-4">
+              <select-base
+                label="Operator"
+                size="small"
+                v-model="dateFilter.operator"
+                optionsType="objects"
+                optionValueType="value"
+                :options="[
+                  { title: '>=', value: 'gte' },
+                  { title: '<=', value: 'lte' },
+                  { title: '=', value: '' },
+                ]"
+              />
+            </div>
+            <div class="w-full lg:w-2/4 px-4">
+              <input-base
+                label="Value"
+                size="small"
+                v-model="dateFilter.value"
+                type="date"
+              />
+            </div>
+          </div>
+          <div class="w-full lg:w-1/12 px-4"></div>
+          <div class="w-full lg:w-2/12 px-4">
+            <input-base label="Search" size="small" v-model="filter.search" />
+          </div>
+          <div class="w-full lg:w-1/12 px-4 flex items-center justify-center">
+            <button-base
+              color="success"
+              size="small"
+              title="Filter"
+              @click="runFilter()"
+            >
+              Run
+            </button-base>
           </div>
         </template>
       </div>
@@ -273,9 +329,15 @@ export default {
       },
       showAdwansedFilter: false,
       priceFilter: {
-        type: "rate_from",
-        operator: ">=",
+        type: "rate_to",
+        operator: "gte",
         value: null,
+      },
+      dateFilter: {
+        field: "created",
+        operator: "gte",
+        // value:  new Date().toISOString().split('T')[0],
+        value: "",
       },
       rsss: [],
       countries: [],
@@ -356,13 +418,15 @@ export default {
       this.paginator.setPage(1);
       for (const key in this.filter) {
         const element = this.filter[key];
-        if (typeof element == 'boolean') {
-          this.filter[key] = false
-        } else {
-          this.filter[key] = null
+        if (typeof element == "boolean") {
+          this.filter[key] = false;
+        } else if (typeof element == "string") {
+          this.filter[key] = null;
         }
+        this.priceFilter.value = "";
+        this.dateFilter.value = "";
       }
-      this.getItems()
+      this.getItems();
     },
     filterFavourited() {
       this.paginator.setPage(1);
@@ -384,9 +448,18 @@ export default {
           query[key] = element;
         }
       }
-      if (this.priceFilter.value) {
-        const sufix = this.priceFilter.operator === ">=" ? "gte" : "lte";
-        query[this.priceFilter.type + "__" + sufix] = this.priceFilter.value;
+      if (this.priceFilter.type == "no_rate") {
+        query["no_rate"] = true;
+      } else if (this.priceFilter.value) {
+        query[this.priceFilter.type + "__" + this.priceFilter.operator] =
+          this.priceFilter.value;
+      }
+      if (this.dateFilter.value !== "") {
+        const sufix =
+          this.dateFilter.operator !== ""
+            ? "__" + this.dateFilter.operator
+            : "";
+        query[this.dateFilter.field + sufix] = this.dateFilter.value;
       }
       return query;
     },

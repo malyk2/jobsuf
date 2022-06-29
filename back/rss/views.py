@@ -29,10 +29,17 @@ class JobListFilter(filters.FilterSet):
     rate_from__lte = filters.NumberFilter(field_name='rate_from', lookup_expr='lte')
     rate_to__gte = filters.NumberFilter(field_name='rate_to', lookup_expr='gte')
     rate_to__lte = filters.NumberFilter(field_name='rate_to', lookup_expr='lte')
+    created = filters.DateFilter(field_name='created', lookup_expr='date')
+    created__gte = filters.DateFilter(field_name='created', lookup_expr='date__gte')
+    created__lte = filters.DateFilter(field_name='created', lookup_expr='date__lte')
+    published = filters.DateFilter(field_name='published', lookup_expr='date')
+    published__gte = filters.DateFilter(field_name='published', lookup_expr='date__gte')
+    published__lte = filters.DateFilter(field_name='published', lookup_expr='date__lte')
     search = filters.CharFilter(field_name='search_vector')
     only_unread = filters.BooleanFilter(method='only_unread_filter')
     only_favourited = filters.BooleanFilter(method='only_favourited_filter')
     favourited_rate = filters.NumberFilter(method='favourited_rate_filter')
+    no_rate = filters.BooleanFilter(method='no_rate_filter')
 
     class Meta:
         model = Job
@@ -51,6 +58,12 @@ class JobListFilter(filters.FilterSet):
     def favourited_rate_filter(self, queryset, name, value):
         if value != None:
             return queryset.filter(pivot_favourited_users__rate=value)
+        return queryset
+    
+    def no_rate_filter(self, queryset, name, value):
+        if value:
+            return queryset.filter(rate_to__isnull=True, rate_from__isnull=True, budget__isnull=True)
+            # return queryset.filter(rate_to=1111111)
         return queryset
 
 
