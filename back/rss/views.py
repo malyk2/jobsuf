@@ -33,6 +33,7 @@ class JobListFilter(filters.FilterSet):
     only_unread = filters.BooleanFilter(method='only_unread_filter')
     only_favourited = filters.BooleanFilter(method='only_favourited_filter')
     favourited_rate = filters.NumberFilter(method='favourited_rate_filter')
+    no_rate = filters.BooleanFilter(method='no_rate_filter')
 
     class Meta:
         model = Job
@@ -51,6 +52,12 @@ class JobListFilter(filters.FilterSet):
     def favourited_rate_filter(self, queryset, name, value):
         if value != None:
             return queryset.filter(pivot_favourited_users__rate=value)
+        return queryset
+    
+    def no_rate_filter(self, queryset, name, value):
+        if value:
+            return queryset.filter(rate_to__isnull=True, rate_from__isnull=True, budget__isnull=True)
+            # return queryset.filter(rate_to=1111111)
         return queryset
 
 
