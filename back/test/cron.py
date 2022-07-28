@@ -7,10 +7,15 @@ from django.db.models.sql.datastructures import Join
 import environ
 from rss.cron import get_rss_url
 from django.db import connection
+from rest_framework.authtoken.models import Token
 
 
 def test_command_1():
     pass
+    # user = User.objects.get(pk=2)
+    # token = Token.objects.create(user=user)
+    # token, created = Token.objects.get_or_create(user=user)
+    # print(token.key) 
     # test = U
     # us = Upwork.objects.get(pk=5)
     # query = """ALTER TABLE public.rss_job
