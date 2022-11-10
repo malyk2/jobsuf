@@ -1,0 +1,17 @@
+FROM node:16-alpine
+
+#RUN apk add --no-cache git 
+
+WORKDIR /var/www
+
+COPY package*.json ./
+RUN npm install
+
+COPY ./ .
+
+COPY deploy/prod/front_endpoint.sh /var/www
+RUN chmod +x /var/www/front_endpoint.sh
+
+CMD  /var/www/front_endpoint.sh
+
+
