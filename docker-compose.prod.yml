@@ -26,13 +26,7 @@ services:
   back:
     restart: always
     container_name: jobsuf_prod_back
-    build:
-      context: deploy/prod
-      dockerfile: app.docker
-      args:
-        - REPO_SSH=${REPO_SSH}
-        - REPO_BRANCH=${REPO_BRANCH}
-        - REPO_FOLDER=back
+    image: own-registry.tk/jobsuf_back:latest
     environment:
       - "DEBUG=True"
       - "API_HOST=${API_HOST}"
@@ -66,13 +60,7 @@ services:
       - pgdata_prod:/var/lib/postgresql/data/
   front:
     container_name: jobsuf_prod_front
-    build:
-      context: deploy/prod
-      dockerfile: front.docker
-      args:
-      - REPO_SSH=${REPO_SSH}
-      - REPO_BRANCH=${REPO_BRANCH}
-      - REPO_FOLDER=front
+    image: own-registry.tk/jobsuf_front:latest
     stdin_open: true
     tty: true
     volumes:
