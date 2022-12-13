@@ -27,7 +27,7 @@ services:
     volumes:
       - pgdata_local:/var/lib/postgresql/data/
   front:
-    image: node:lts-alpine
+    image: node:16-alpine
     environment:
       - "VUE_APP_API_URL=http://localhost"
       - "VUE_APP_API_PORT=8000"
