@@ -8,7 +8,8 @@ from django.core import serializers
 from django.db.models import Prefetch, Q
 from django.contrib.auth.models import User
 from django_filters import rest_framework as filters
-
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
 
 class UpworkViewSet(viewsets.ModelViewSet):
     queryset = Upwork.objects.all()
@@ -40,6 +41,7 @@ class JobListFilter(filters.FilterSet):
     only_favourited = filters.BooleanFilter(method='only_favourited_filter')
     favourited_rate = filters.NumberFilter(method='favourited_rate_filter')
     no_rate = filters.BooleanFilter(method='no_rate_filter')
+    period = filters.CharFilter(method='period_filter')
 
     class Meta:
         model = Job
@@ -63,7 +65,21 @@ class JobListFilter(filters.FilterSet):
     def no_rate_filter(self, queryset, name, value):
         if value:
             return queryset.filter(rate_to__isnull=True, rate_from__isnull=True, budget__isnull=True)
-            # return queryset.filter(rate_to=1111111)
+        return queryset
+
+    def period_filter(self, queryset, name, value):
+        if value != None:
+            delta = None
+            if value == 'last_week':
+                delta = relativedelta(weeks=1);
+            if value == 'last_2_weeks':
+                delta = relativedelta(weeks=2);
+            if value == 'last_month':
+                delta = relativedelta(months=1);
+            if value == 'last_2_months':
+                delta = relativedelta(months=2);
+            if delta:
+                return queryset.filter(created__date__gte=(datetime.now() - delta))
         return queryset
 
 

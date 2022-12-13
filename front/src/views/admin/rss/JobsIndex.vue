@@ -5,7 +5,7 @@
         <h6 class="text-blueGray-700 text-xl font-bold">Jobs</h6>
       </template>
       <div class="w-full flex flex-wrap">
-        <div class="w-full lg:w-3/12 px-4">
+        <div class="w-full lg:w-2/12 px-4">
           <select-base
             label="RSS"
             firstOption="RSS"
@@ -16,7 +16,7 @@
             @change="runFilter"
           />
         </div>
-        <div class="w-full lg:w-3/12 px-4">
+        <div class="w-full lg:w-2/12 px-4">
           <select-base
             label="Country"
             firstOption="Country"
@@ -27,6 +27,22 @@
             optionTitleType="name"
             @change="runFilter"
           />
+        </div>
+        <div class="w-full lg:w-2/12 px-4">
+          <select-base
+            label="Period"
+            firstOption="Period"
+            v-model="filter.period"
+            size="small"
+            :slotOptions="true"
+            @change="runFilter"
+          >
+            <option value="">Period</option>
+            <option value="last_week">Last week</option>
+            <option value="last_2_weeks">Last 2 weeks</option>
+            <option value="last_month">Last month</option>
+            <option value="last_2_months">Last 2 months</option>
+          </select-base>
         </div>
         <div class="w-full lg:w-1/12 px-4">
           <checkbox-base
@@ -326,6 +342,7 @@ export default {
           this.$route.query.only_favourited == "true" ? true : false,
         favourited_rate: this.$route.query.favourited_rate || null,
         search: this.$route.query.search || null,
+        period: this.$route.query.period || 'last_month',
       },
       showAdwansedFilter: false,
       priceFilter: {

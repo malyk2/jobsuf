@@ -1,14 +1,9 @@
 <template>
   <div class="relative w-full mb-3">
-    <label
-      class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-      htmlFor="grid-password"
-      v-if="label"
-    >
+    <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password" v-if="label">
       {{ label }}
     </label>
-    <select
-      class="
+    <select class="
         border-0
         placeholder-blueGray-300
         text-blueGray-600
@@ -21,25 +16,20 @@
         ease-linear
         transition-all
         duration-150
-      "
-      :class=[sizeClasses]
-      :value="modelValue"
-      @change="$emit('update:modelValue', $event.target.value)"
-    >
-      <option v-if="firstOption" :value="null">{{ firstOption }}</option>
-      <template v-if="optionsType == 'array'">
-        <option v-for="(option, index) in options" :key="index" :value="option">
-          {{ option }}
-        </option>
-      </template>
-      <template v-else-if="optionsType == 'objects'">
-        <option
-          v-for="(option, index) in options"
-          :key="index"
-          :value="option[optionValueType]"
-        >
-          {{ option[optionTitleType] }}
-        </option>
+      " :class=[sizeClasses] :value="modelValue" @change="$emit('update:modelValue', $event.target.value)">
+      <slot v-if="slotOptions" />
+      <template v-else>
+        <option v-if="firstOption" :value="null">{{ firstOption }}</option>
+        <template v-if="optionsType == 'array'">
+          <option v-for="(option, index) in options" :key="index" :value="option">
+            {{ option }}
+          </option>
+        </template>
+        <template v-else-if="optionsType == 'objects'">
+          <option v-for="(option, index) in options" :key="index" :value="option[optionValueType]">
+            {{ option[optionTitleType] }}
+          </option>
+        </template>
       </template>
     </select>
     <p v-if="error" class="text-red-500 text-xs">
@@ -92,6 +82,10 @@ export default {
     firstOption: {
       default: null,
       type: String,
+    },
+    slotOptions: {
+      default: false,
+      type: Boolean,
     },
   },
   computed: {
